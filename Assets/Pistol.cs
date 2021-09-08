@@ -11,7 +11,10 @@ public class Pistol : MonoBehaviour
 
     AudioSource audio;
     public ParticleSystem shootParticle;
-
+    public Animator animator;
+    
+    public float fireRate = 0.15f;
+    float nextTimeToFire = 0;
     void Awake()
     {
         audio = GetComponent<AudioSource>();
@@ -19,20 +22,32 @@ public class Pistol : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetButtonDown("Fire1"))
+        if(Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire)
         {
             Shoot();
+            nextTimeToFire = Time.time + fireRate;
         }
-	}
 
-	private void Shoot()
+        if (Input.GetButtonDown("Fire2"))
+        {
+            Knife();
+        }
+
+    }
+
+    private void Knife()
+    {
+        animator.SetTrigger("Knife");
+    }
+
+    private void Shoot()
     {
         RaycastHit hit;
 
         audio.Play();
         shootParticle.Play();
-
-        if (Physics.Raycast(raycastOrigin.position, raycastOrigin.forward, out hit, range, shootableLayer))
+        animator.SetTrigger("Shoot");
+        if (Physics.Raycast(raycastOrigin.position, raycastOrigin.forward, out hit, range, shootableLayer) )
         {
             Debug.Log(hit.transform.name);
             Target target = hit.transform.GetComponent<Target>();

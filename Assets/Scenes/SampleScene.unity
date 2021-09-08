@@ -197,13 +197,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 3.8
-  m_Radius: 1.34
+  m_Height: 4.95
+  m_Radius: 1.56
   m_SlopeLimit: 60
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 1.84}
+  m_Center: {x: 1.29, y: 0, z: 1.6}
 --- !u!114 &117341623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,10 +218,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 117341622}
   speed: 12
-  gravity: -20
+  gravity: -40
   jumpHeight: 3
   groundCheck: {fileID: 365328045}
-  groundDistance: 0.4
+  groundDistance: 1
   groundMask:
     serializedVersion: 2
     m_Bits: 256
@@ -260,7 +260,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: 10}
+  m_SizeDelta: {x: 5, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &328663714
 MonoBehaviour:
@@ -311,7 +311,7 @@ GameObject:
   m_Layer: 0
   m_Name: GroundCheck
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -323,7 +323,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 365328044}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.008, z: 0}
+  m_LocalPosition: {x: 0, y: -2.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 117341621}
@@ -3472,8 +3472,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.143493, y: 0, z: 0, w: 0.9896513}
+  m_LocalPosition: {x: 0, y: 2.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6500547292871690364}
@@ -3748,7 +3748,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh23732
+  m_Name: pb_Mesh14228
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3997,7 +3997,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6494397153359653950}
   serializedVersion: 6
-  lengthInSec: 0.1
+  lengthInSec: 0.05
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -9064,6 +9064,8 @@ MonoBehaviour:
     m_Bits: 311
   raycastOrigin: {fileID: 963194228}
   shootParticle: {fileID: 6406179732874184814}
+  animator: {fileID: 6589590396150006728}
+  fireRate: 0.2
 --- !u!82 &6494378599157992314
 AudioSource:
   m_ObjectHideFlags: 0
