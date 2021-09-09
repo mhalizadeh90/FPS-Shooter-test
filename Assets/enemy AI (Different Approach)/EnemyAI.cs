@@ -14,6 +14,7 @@ public class EnemyAI : MonoBehaviour
     public Vector3 walkPoint;
     bool walkPointSet;
     public float walkPopintRange;
+    public float TimeForChangeWalkPoint = 5;
 
     // attacking
     public float timeBetweenAttacks;
@@ -41,7 +42,7 @@ public class EnemyAI : MonoBehaviour
         PlayerInAttackRange = Physics.CheckSphere(transform.position, attackRange, WhatIsPlayer);
 
         #region When Duraing the chase, Player hide behind the obstacle then chase mode switch to patrol
-      
+
         if (playerInSightRange)
             playerInSightRange = !Physics.Linecast(transform.position, Player.transform.position, obstacle);
 
@@ -60,7 +61,8 @@ public class EnemyAI : MonoBehaviour
             agent.SetDestination(walkPoint);
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
-        if (distanceToWalkPoint.sqrMagnitude < 1f)
+
+        if (distanceToWalkPoint.sqrMagnitude < 1f || TimeForChangeWalkPoint < Time.time)
             walkPointSet = false;
     }
 
@@ -73,7 +75,10 @@ public class EnemyAI : MonoBehaviour
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
 
         if (Physics.Raycast(walkPoint, -transform.up, 2f, WhatisGround))
+        {
             walkPointSet = true;
+            TimeForChangeWalkPoint += Time.time;
+        }
     }
 
     void ChasePlayer()
