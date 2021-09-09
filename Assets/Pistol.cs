@@ -46,7 +46,6 @@ public class Pistol : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(KnifeSpherePoint.position, knifeSphereRadius, shootableLayer);
         foreach (Collider hit in hits)
         {
-            Debug.Log("Knife ==> " + hit.name);
 
             Target target = hit.transform.GetComponent<Target>();
             if (target != null)
@@ -73,7 +72,7 @@ public class Pistol : MonoBehaviour
         animator.SetTrigger("Shoot");
         if (Physics.Raycast(raycastOrigin.position, raycastOrigin.forward, out hit, range, shootableLayer) )
         {
-            Debug.Log(hit.transform.name);
+           // Debug.Log(hit.transform.name);
             Target target = hit.transform.GetComponent<Target>();
             if (target != null)
             {

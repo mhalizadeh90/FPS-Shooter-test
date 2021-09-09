@@ -63,9 +63,6 @@ public class EnemyAI : MonoBehaviour
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
-        if (Input.GetKeyDown(KeyCode.D))
-            print("Distance To Destination: " + distanceToWalkPoint.sqrMagnitude);
-
         if (distanceToWalkPoint.sqrMagnitude < 5 || nextChangeWalkPoint < Time.time)
             walkPointSet = false;
     }

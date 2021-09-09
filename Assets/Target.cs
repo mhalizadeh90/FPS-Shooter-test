@@ -19,6 +19,10 @@ public class Target : MonoBehaviour
     private void Die()
     {
         //die
+        onEnemyDied?.Invoke();
         Destroy(gameObject);
     }
+
+    public static Action onEnemyDied;
+
 }
