@@ -8,7 +8,7 @@ public class EnemyAI : MonoBehaviour
 
     public Transform Player;
 
-    public LayerMask WhatisGround, WhatIsPlayer;
+    public LayerMask WhatisGround, WhatIsPlayer, obstacle;
 
     // patroling
     public Vector3 walkPoint;
@@ -39,6 +39,13 @@ public class EnemyAI : MonoBehaviour
         //Chcle for sight and attack range
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, WhatIsPlayer);
         PlayerInAttackRange = Physics.CheckSphere(transform.position, attackRange, WhatIsPlayer);
+
+        #region When Duraing the chase, Player hide behind the obstacle then chase mode switch to patrol
+      
+        if (playerInSightRange)
+            playerInSightRange = !Physics.Linecast(transform.position, Player.transform.position, obstacle);
+
+        #endregion
 
         if (!playerInSightRange && !PlayerInAttackRange) Patroling();
         if (playerInSightRange && !PlayerInAttackRange) ChasePlayer();
