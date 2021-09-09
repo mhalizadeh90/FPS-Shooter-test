@@ -9,13 +9,14 @@ public class EnemyAI : MonoBehaviour
     public Transform Player;
 
     public LayerMask WhatisGround, WhatIsPlayer, obstacle;
+    public float GroundRaycastDistance = 0.1f;
 
     // patroling
     public Vector3 walkPoint;
     bool walkPointSet;
     public float walkPopintRange;
     public float TimeForChangeWalkPoint = 5;
-
+    float nextChangeWalkPoint = 0;
     // attacking
     public float timeBetweenAttacks;
     bool alreadyAttacked;
@@ -32,7 +33,7 @@ public class EnemyAI : MonoBehaviour
     void Awake()
     {
         Player = GameObject.FindWithTag("Player").transform;
-        agent = GetComponent<NavMeshAgent>();
+        //agent = GetComponent<NavMeshAgent>();
     }
 
     void Update()
@@ -62,24 +63,38 @@ public class EnemyAI : MonoBehaviour
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
-        if (distanceToWalkPoint.sqrMagnitude < 1f || TimeForChangeWalkPoint < Time.time)
+        if (Input.GetKeyDown(KeyCode.D))
+            print("Distance To Destination: " + distanceToWalkPoint.sqrMagnitude);
+
+        if (distanceToWalkPoint.sqrMagnitude < 5 || nextChangeWalkPoint < Time.time)
             walkPointSet = false;
     }
 
     private void SearchWalkPoint()
     {
         // calculate random point in range
+
+        //Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * walkPopintRange;
+        //randomDirection += transform.position;
+        //NavMeshHit hit;
+        //NavMesh.SamplePosition(randomDirection, out hit, walkPopintRange, 1);
+        //walkPoint = hit.position;
+        //walkPointSet = true;
+
+        //===========
+
         float randomZ = UnityEngine.Random.Range(-walkPopintRange, walkPopintRange);
         float randomX = UnityEngine.Random.Range(-walkPopintRange, walkPopintRange);
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
 
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, WhatisGround))
+        if (Physics.Raycast(walkPoint, -transform.up, GroundRaycastDistance, WhatisGround))
         {
             walkPointSet = true;
-            TimeForChangeWalkPoint += Time.time;
+            nextChangeWalkPoint = TimeForChangeWalkPoint + Time.time;
         }
     }
+
 
     void ChasePlayer()
     {
