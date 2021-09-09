@@ -32,7 +32,14 @@ public class Spawner : MonoBehaviour
         remainingEnemy--;
 
         if (remainingEnemy == 0)
-            NextWave();
+        {
+            print("currentWaveNumber: " + currentWaveNumber);
+            if (currentWaveNumber < waves.Length)
+                NextWave();
+            else
+                OnAllEnemiesKilled?.Invoke();
+        }
+
     }
     void Start()
     {
@@ -92,5 +99,6 @@ public class Spawner : MonoBehaviour
     }
 
     public static Action<int> OnWaveChanged;
+    public static Action OnAllEnemiesKilled;
 
 }

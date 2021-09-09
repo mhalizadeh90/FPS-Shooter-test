@@ -7,15 +7,25 @@ public class MouseLook : MonoBehaviour
     [SerializeField] float mouseSensetivity = 100f;
     public Transform playerBody;
     float xRotation = 0f;
+    bool isGameFinished = false;
 
-    void Start()
+    void OnEnable()
     {
+        Spawner.OnAllEnemiesKilled += EnableMouseCursor;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    void EnableMouseCursor()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+        print("Set Mouse To Default");
+    }
 
     void Update()
     {
+        if (isGameFinished)
+            return;
+
         float mouseX = Input.GetAxis("Mouse X") * mouseSensetivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensetivity * Time.deltaTime;
 
@@ -23,5 +33,10 @@ public class MouseLook : MonoBehaviour
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         playerBody.Rotate(Vector3.up * mouseX);
+    }
+
+    void OnDisable()
+    {
+        Spawner.OnAllEnemiesKilled -= EnableMouseCursor;
     }
 }
