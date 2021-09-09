@@ -35,10 +35,34 @@ public class Pistol : MonoBehaviour
 
     }
 
+    [Header("Knife")]
+    public Transform KnifeSpherePoint;
+    public float knifeSphereRadius = 0.5f;
+    public float knifeDamage = 5;
     private void Knife()
     {
         animator.SetTrigger("Knife");
+
+        Collider[] hits = Physics.OverlapSphere(KnifeSpherePoint.position, knifeSphereRadius, shootableLayer);
+        foreach (Collider hit in hits)
+        {
+            Debug.Log("Knife ==> " + hit.name);
+
+            Target target = hit.transform.GetComponent<Target>();
+            if (target != null)
+            {
+                target.TakeDamage(knifeDamage);
+            }
+
+        }
     }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(KnifeSpherePoint.position, knifeSphereRadius);
+    }
+
 
     private void Shoot()
     {
