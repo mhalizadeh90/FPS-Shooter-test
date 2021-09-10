@@ -78,6 +78,8 @@ MonoBehaviour:
   RightGunParticle: {fileID: 5969193208715824517}
   KnifeParticle: {fileID: 0}
   ShootSFXPlayer: {fileID: 5969193207795554965}
+  AttackDamage: 5
+  MissShotPercentage: 0
 --- !u!195 &3114128458154842771
 NavMeshAgent:
   m_ObjectHideFlags: 0

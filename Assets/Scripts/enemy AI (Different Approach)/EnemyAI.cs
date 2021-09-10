@@ -37,7 +37,7 @@ public class EnemyAI : MonoBehaviour
     public float AttackDamage;
 
     [Range(0, 1)] public float MissShotPercentage;
-
+    private const float shootOffsetToPlayer = 5;
 
     void Awake()
     {
@@ -128,7 +128,7 @@ public class EnemyAI : MonoBehaviour
                 aimDirection.x += UnityEngine.Random.Range(0, MissShotPercentage);
                 aimDirection.z += UnityEngine.Random.Range(0, MissShotPercentage);
 
-                bool isPlayerGetShot = Physics.Raycast(transform.position, aimDirection, out hit, 100, WhatIsPlayer);
+                bool isPlayerGetShot = Physics.Raycast(transform.position, aimDirection, out hit, attackRange + shootOffsetToPlayer, WhatIsPlayer);
 
                 if (isPlayerGetShot)
                 {
@@ -143,6 +143,22 @@ public class EnemyAI : MonoBehaviour
             {
                 KnifeParticle.Play();
                 //TODO: RAYCAST FOR KNIFE AND THEN DAMAGE IF HITT THE PLAYER
+                RaycastHit hit;
+
+                Vector3 aimDirection = (Player.transform.position - transform.position).normalized;
+
+                aimDirection.y += UnityEngine.Random.Range(0, MissShotPercentage);
+                aimDirection.x += UnityEngine.Random.Range(0, MissShotPercentage);
+                aimDirection.z += UnityEngine.Random.Range(0, MissShotPercentage);
+
+                bool isPlayerGetShot = Physics.Raycast(transform.position, aimDirection, out hit, attackRange + shootOffsetToPlayer, WhatIsPlayer);
+
+                if (isPlayerGetShot)
+                {
+                    Debug.Log("Damage: " + hit.transform.name + " [" + AttackDamage + "]");
+                    PlayerHealth target = hit.transform.GetComponent<PlayerHealth>();
+                    target?.TakeDamage(AttackDamage);
+                }
             }
 
             ShootSFXPlayer.Play();

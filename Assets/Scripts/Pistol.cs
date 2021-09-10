@@ -15,6 +15,14 @@ public class Pistol : MonoBehaviour
     
     public float fireRate = 0.15f;
     float nextTimeToFire = 0;
+
+    [Header("Knife")]
+    public Transform KnifeSpherePoint;
+    public float knifeSphereRadius = 0.5f;
+    public float knifeDamage = 5;
+    public float knifeRate = 0.15f;
+    float nextTimeToKnife = 0;
+
     void Awake()
     {
         audio = GetComponent<AudioSource>();
@@ -28,17 +36,14 @@ public class Pistol : MonoBehaviour
             nextTimeToFire = Time.time + fireRate;
         }
 
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire2") && Time.time >= nextTimeToKnife)
         {
             Knife();
+            nextTimeToKnife = Time.time + knifeRate;
         }
 
     }
 
-    [Header("Knife")]
-    public Transform KnifeSpherePoint;
-    public float knifeSphereRadius = 0.5f;
-    public float knifeDamage = 5;
     private void Knife()
     {
         animator.SetTrigger("Knife");
@@ -50,6 +55,7 @@ public class Pistol : MonoBehaviour
             if (target != null)
             {
                 target.TakeDamage(knifeDamage, hit.transform.position);
+                print("Knife is done");
             }
 
         }
