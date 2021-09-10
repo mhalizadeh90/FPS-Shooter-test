@@ -28,6 +28,17 @@ public class Pistol : MonoBehaviour
         audio = GetComponent<AudioSource>();
     }
 
+    void OnEnable()
+    {
+        CheatCode.OnCheatCodeInfiniteDamage += setAttackDamageToMaximum;
+    }
+
+    void setAttackDamageToMaximum()
+    {
+        damage = float.MaxValue;
+        knifeDamage = float.MaxValue;
+    }
+
     void Update()
     {
         if(Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire)
@@ -85,5 +96,10 @@ public class Pistol : MonoBehaviour
                 target.TakeDamage(damage, hit.point);
             }
         }
+    }
+
+    void OnDisable()
+    {
+        CheatCode.OnCheatCodeInfiniteDamage -= setAttackDamageToMaximum;
     }
 }

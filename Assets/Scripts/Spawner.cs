@@ -19,8 +19,15 @@ public class Spawner : MonoBehaviour
     public float spawnSphereSize;
     public Transform[] spawnPositions;
 
+    Transform PlayerPosition;
+    const float minimumSpawnDistanceToPlayer = 10;
 
     int remainingEnemy;
+
+    void Awake()
+    {
+        PlayerPosition = FindObjectOfType<PlayerMovement>().transform;
+    }
 
     void OnEnable()
     {
@@ -33,7 +40,6 @@ public class Spawner : MonoBehaviour
 
         if (remainingEnemy == 0)
         {
-            print("currentWaveNumber: " + currentWaveNumber);
             if (currentWaveNumber < waves.Length)
                 NextWave();
             else
@@ -63,11 +69,19 @@ public class Spawner : MonoBehaviour
         //TODO: SET AI DIFFICULTY BASED ON THE WAVE
     }
 
-    //TODO: FIND RANDOM LOCATION WITH FILTER based on the distance with player
     private Vector3 GetRandomPosition()
     {
-        // TODO: Check if it is far from player
-        Vector3 randomPositionToSpawn = spawnPositions[UnityEngine.Random.Range(0, spawnPositions.Length)].position; 
+        Vector3 randomPositionToSpawn;
+
+        #region Generate Position and Check If it is far from Current Position of Player
+
+        do
+        {
+            randomPositionToSpawn = spawnPositions[UnityEngine.Random.Range(0, spawnPositions.Length)].position;
+        } while (Vector3.Distance(randomPositionToSpawn, PlayerPosition.position) <= minimumSpawnDistanceToPlayer);
+
+        #endregion
+
         return randomPositionToSpawn;
     }
 

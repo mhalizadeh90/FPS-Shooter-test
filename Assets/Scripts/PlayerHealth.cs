@@ -7,7 +7,7 @@ public class PlayerHealth : MonoBehaviour
 {
     public float MaxHealth = 50f;
     float health;
-
+    bool isPlayerUndamagable = false;
     void Awake()
     {
         health = MaxHealth;
@@ -16,9 +16,15 @@ public class PlayerHealth : MonoBehaviour
     void OnEnable()
     {
         HealthCollectable.OnHealthCollectableUsed += Heal;
+        CheatCode.OnCheatCodeInfiniteHealth += SetHealthToInfinite;
+        CheatCode.OnCheatCodeKill += KillInstantly;
+
     }
     public void TakeDamage(float amount)
     {
+        if (isPlayerUndamagable)
+            return;
+
         health -= amount;
         
         OnPlayerDamaged?.Invoke(health/MaxHealth);
@@ -32,19 +38,33 @@ public class PlayerHealth : MonoBehaviour
     public void Heal(float amount)
     {
         health += amount;
+        health = Mathf.Clamp(health, 0, MaxHealth);
         OnPlayerHealed?.Invoke(health / MaxHealth);
+    }
+
+    void SetHealthToInfinite()
+    {
+        Heal(MaxHealth);
+        isPlayerUndamagable = true;
+    }
+
+    void KillInstantly()
+    {
+        isPlayerUndamagable = false;
+        TakeDamage(MaxHealth);
     }
 
 
     private void Die()
     {
-        print("Player is Dead");
         OnPlayerDied?.Invoke();
     }
 
     void OnDisable()
     {
         HealthCollectable.OnHealthCollectableUsed -= Heal;
+        CheatCode.OnCheatCodeInfiniteHealth -= SetHealthToInfinite;
+        CheatCode.OnCheatCodeKill -= KillInstantly;
     }
 
     public static Action<float> OnPlayerDamaged;
