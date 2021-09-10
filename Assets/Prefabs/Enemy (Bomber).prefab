@@ -28790,12 +28790,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5908601346358461099}
-  - component: {fileID: 5908601346358461098}
   - component: {fileID: 5908601346358461097}
   - component: {fileID: 5908601346358461096}
   - component: {fileID: 5908601346358461103}
   - component: {fileID: 5908601346358461102}
   - component: {fileID: 5908601346358461101}
+  - component: {fileID: 232028913}
   m_Layer: 0
   m_Name: Enemy Knife(New) - Robot (Particle)
   m_TagString: Untagged
@@ -28820,48 +28820,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5908601346358461098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5908601346358461100}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db3a3797b65f7a64eba1d8a8c809cc93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 5908601346358461097}
-  Player: {fileID: 0}
-  WhatisGround:
-    serializedVersion: 2
-    m_Bits: 256
-  WhatIsPlayer:
-    serializedVersion: 2
-    m_Bits: 512
-  obstacle:
-    serializedVersion: 2
-    m_Bits: 256
-  GroundRaycastDistance: 2
-  walkPoint: {x: 0, y: 0, z: 0}
-  walkPopintRange: 15
-  TimeForChangeWalkPoint: 5
-  timeBetweenAttacks: 1
-  sightRange: 20
-  attackRange: 3
-  playerInSightRange: 0
-  PlayerInAttackRange: 0
-  isGunner: 0
-  Projectile: {fileID: 8889920760627336572, guid: 8b7866edf1a4a5d468c28f54bb91024b,
-    type: 3}
-  LeftGunParticle: {fileID: 0}
-  RightGunParticle: {fileID: 0}
-  KnifeParticle: {fileID: 2350866166534663461}
-  ShootSFXPlayer: {fileID: 1358750196607177229}
-  AttackDamage: 10
-  MissShotPercentage: 0
-  aIBrains: {fileID: 11400000, guid: a2846e108dcc99147897654d0f840fe6, type: 2}
 --- !u!195 &5908601346358461097
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -28959,3 +28917,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 50
   DamageParticle: {fileID: 1358750196277411895}
+--- !u!114 &232028913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5908601346358461100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6382afc1ca575b4eb33d33cfe529c20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 5908601346358461097}
+  Player: {fileID: 0}
+  WhatisGround:
+    serializedVersion: 2
+    m_Bits: 256
+  WhatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 512
+  obstacle:
+    serializedVersion: 2
+    m_Bits: 256
+  GroundRaycastDistance: 2
+  walkPoint: {x: 0, y: 0, z: 0}
+  walkPopintRange: 15
+  TimeForChangeWalkPoint: 5
+  timeBetweenAttacks: 1
+  sightRange: 20
+  attackRange: 3
+  playerInSightRange: 0
+  PlayerInAttackRange: 0
+  Projectile: {fileID: 0}
+  ShootSFXPlayer: {fileID: 1358750196607177229}
+  AttackDamage: 10
+  MissShotPercentage: 0
+  aIBrains: {fileID: 11400000, guid: a2846e108dcc99147897654d0f840fe6, type: 2}
+  BombParticle: {fileID: 2350866166534663461}

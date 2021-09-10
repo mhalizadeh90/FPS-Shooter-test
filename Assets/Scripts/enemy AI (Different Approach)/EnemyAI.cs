@@ -7,6 +7,7 @@ public class EnemyAI : MonoBehaviour
     public NavMeshAgent agent;
 
     public Transform Player;
+    protected PlayerHealth playerHealth;
 
     public LayerMask WhatisGround, WhatIsPlayer, obstacle;
     public float GroundRaycastDistance = 0.1f;
@@ -19,25 +20,22 @@ public class EnemyAI : MonoBehaviour
     float nextChangeWalkPoint = 0;
     // attacking
     public float timeBetweenAttacks;
-    bool alreadyAttacked;
+    protected bool alreadyAttacked;
 
     //States
     public float sightRange, attackRange;
     public bool playerInSightRange, PlayerInAttackRange;
 
 
-    public bool isGunner;
+   // public bool isGunner;
     public GameObject Projectile;
 
-    public ParticleSystem LeftGunParticle;
-    public ParticleSystem RightGunParticle;
-    public ParticleSystem KnifeParticle;
 
     public AudioSource ShootSFXPlayer;
     public float AttackDamage;
 
     [Range(0, 1)] public float MissShotPercentage;
-    private const float shootOffsetToPlayer = 5;
+    protected const float shootOffsetToPlayer = 5;
 
     public AIBrain aIBrains;
 
@@ -45,7 +43,8 @@ public class EnemyAI : MonoBehaviour
 
     void Awake()
     {
-        Player = GameObject.FindWithTag("Player").transform;
+        Player = GameObject.FindObjectOfType<PlayerMovement>().transform;
+        playerHealth = Player.GetComponent<PlayerHealth>();
         EnemyHealth = GetComponent<Health>();
         //agent = GetComponent<NavMeshAgent>();
     }
@@ -65,7 +64,7 @@ public class EnemyAI : MonoBehaviour
 
         if (!playerInSightRange && !PlayerInAttackRange) Patroling();
         if (playerInSightRange && !PlayerInAttackRange) ChasePlayer();
-        if (PlayerInAttackRange && playerInSightRange) AttackPlayer();
+        if (PlayerInAttackRange && playerInSightRange) Attack();
     }
 
     void Patroling()
@@ -97,85 +96,119 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    protected void StandStillAndLookAtPlayer()
+    {
+        agent.SetDestination(transform.position);
+        transform.LookAt(Player);
+    }
+
+    protected void AimAndAttack()
+    {
+        Vector3 aimDirection = GetAimDirection();
+        if (isPlayerGetShot(aimDirection)) playerHealth?.TakeDamage(AttackDamage);
+    }
+
+    protected void SetNextAttackTimeBasedOnFireRate()
+    {
+        alreadyAttacked = true;
+        Invoke(nameof(ResetAttack), timeBetweenAttacks);
+    }
 
     void ChasePlayer()
     {
         agent.SetDestination(Player.position);
     }
 
-    void AttackPlayer()
+    public virtual void Attack()
     {
-        // Make sure enemy doesnt move
-        agent.SetDestination(transform.position);
-
-        transform.LookAt(Player);
-
-        if(!alreadyAttacked)
-        {
-            #region Attack Code
-            //Rigidbody rb = Instantiate(Projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-            //rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-            //rb.AddForce(transform.up * 8f, ForceMode.Impulse);
-
-            //==========
-            //TODO: REFACTOR
-            // for gunner
-            if(isGunner)
-            {
-                LeftGunParticle.Play();
-                RightGunParticle.Play();
-               
-                RaycastHit hit;
-
-                Vector3 aimDirection = (Player.transform.position - transform.position).normalized;
-                
-                aimDirection.y += UnityEngine.Random.Range(0, MissShotPercentage);
-                aimDirection.x += UnityEngine.Random.Range(0, MissShotPercentage);
-                aimDirection.z += UnityEngine.Random.Range(0, MissShotPercentage);
-
-                bool isPlayerGetShot = Physics.Raycast(transform.position, aimDirection, out hit, attackRange + shootOffsetToPlayer, WhatIsPlayer);
-
-                if (isPlayerGetShot)
-                {
-                    Debug.Log("Damage: "+ hit.transform.name +" ["+AttackDamage+"]");
-                    PlayerHealth target = hit.transform.GetComponent<PlayerHealth>();
-                    target?.TakeDamage(AttackDamage);
-                }
-
-                //TODO: RAYCAST FOR SHOOT AND THEN DAMAGE IF HITT THE PLAYER
-            }
-            else
-            {
-                KnifeParticle.Play();
-                //TODO: RAYCAST FOR KNIFE AND THEN DAMAGE IF HITT THE PLAYER
-                RaycastHit hit;
-
-                Vector3 aimDirection = (Player.transform.position - transform.position).normalized;
-
-                aimDirection.y += UnityEngine.Random.Range(0, MissShotPercentage);
-                aimDirection.x += UnityEngine.Random.Range(0, MissShotPercentage);
-                aimDirection.z += UnityEngine.Random.Range(0, MissShotPercentage);
-
-                bool isPlayerGetShot = Physics.Raycast(transform.position, aimDirection, out hit, attackRange + shootOffsetToPlayer, WhatIsPlayer);
-
-                if (isPlayerGetShot)
-                {
-                    Debug.Log("Damage: " + hit.transform.name + " [" + AttackDamage + "]");
-                    PlayerHealth target = hit.transform.GetComponent<PlayerHealth>();
-                    target?.TakeDamage(AttackDamage);
-                }
-            }
-
-            ShootSFXPlayer.Play();
-
-            #endregion
-
-            alreadyAttacked = true;
-            Invoke(nameof(ResetAttack), timeBetweenAttacks);
-        }
+        //ENEMY ATTACK
     }
 
-    private void ResetAttack()
+    protected Vector3 GetAimDirection()
+    {
+        Vector3 aimDirection = (Player.transform.position - transform.position).normalized;
+
+        aimDirection.y += UnityEngine.Random.Range(0, MissShotPercentage);
+        aimDirection.x += UnityEngine.Random.Range(0, MissShotPercentage);
+        aimDirection.z += UnityEngine.Random.Range(0, MissShotPercentage);
+
+        return aimDirection;
+    }
+
+    protected bool isPlayerGetShot(Vector3 ShootDirection)
+    {
+        RaycastHit hit;
+        return(Physics.Raycast(transform.position, ShootDirection, out hit, attackRange + shootOffsetToPlayer, WhatIsPlayer));
+    }
+
+    //void AttackPlayer()
+    //{
+    //    // Make sure enemy doesnt move
+    //    agent.SetDestination(transform.position);
+
+    //    transform.LookAt(Player);
+
+    //    if(!alreadyAttacked)
+    //    {
+    //        #region Attack Code
+    //        //TODO: REFACTOR
+    //        // for gunner
+    //        if(isGunner)
+    //        {
+    //            LeftGunParticle.Play();
+    //            RightGunParticle.Play();
+
+    //            RaycastHit hit;
+
+    //            Vector3 aimDirection = (Player.transform.position - transform.position).normalized;
+
+    //            aimDirection.y += UnityEngine.Random.Range(0, MissShotPercentage);
+    //            aimDirection.x += UnityEngine.Random.Range(0, MissShotPercentage);
+    //            aimDirection.z += UnityEngine.Random.Range(0, MissShotPercentage);
+
+    //            bool isPlayerGetShot = Physics.Raycast(transform.position, aimDirection, out hit, attackRange + shootOffsetToPlayer, WhatIsPlayer);
+
+    //            if (isPlayerGetShot)
+    //            {
+    //                Debug.Log("Damage: "+ hit.transform.name +" ["+AttackDamage+"]");
+    //                PlayerHealth target = hit.transform.GetComponent<PlayerHealth>();
+    //                target?.TakeDamage(AttackDamage);
+    //            }
+
+    //            //TODO: RAYCAST FOR SHOOT AND THEN DAMAGE IF HITT THE PLAYER
+    //        }
+    //        else
+    //        {
+    //            KnifeParticle.Play();
+    //            //TODO: RAYCAST FOR KNIFE AND THEN DAMAGE IF HITT THE PLAYER
+    //            RaycastHit hit;
+
+    //            Vector3 aimDirection = (Player.transform.position - transform.position).normalized;
+
+    //            aimDirection.y += UnityEngine.Random.Range(0, MissShotPercentage);
+    //            aimDirection.x += UnityEngine.Random.Range(0, MissShotPercentage);
+    //            aimDirection.z += UnityEngine.Random.Range(0, MissShotPercentage);
+
+    //            bool isPlayerGetShot = Physics.Raycast(transform.position, aimDirection, out hit, attackRange + shootOffsetToPlayer, WhatIsPlayer);
+
+    //            if (isPlayerGetShot)
+    //            {
+    //                Debug.Log("Damage: " + hit.transform.name + " [" + AttackDamage + "]");
+    //                PlayerHealth target = hit.transform.GetComponent<PlayerHealth>();
+    //                target?.TakeDamage(AttackDamage);
+    //            }
+    //        }
+
+    //        ShootSFXPlayer.Play();
+
+    //        #endregion
+
+    //        alreadyAttacked = true;
+    //        Invoke(nameof(ResetAttack), timeBetweenAttacks);
+    //    }
+    //}
+
+    protected void ResetAttack()
     {
         alreadyAttacked = false;
     }
