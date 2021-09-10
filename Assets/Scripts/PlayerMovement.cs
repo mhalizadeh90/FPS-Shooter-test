@@ -7,6 +7,10 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController controller;
 
     [SerializeField] float speed = 12f;
+    float defaultSpeed;
+    float timeToResetSpeedToDefault;
+    bool StartSpeedResetCountDown = false;
+
     public float gravity = -9.8f;
     public float jumpHeight = 3f;
     public Transform groundCheck;
@@ -15,11 +19,23 @@ public class PlayerMovement : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
 
+    void Awake()
+    {
+        defaultSpeed = speed;
+    }
+
     void OnEnable()
     {
         PlayerHealth.OnPlayerDied += DisablePlayerController;
+        SpeedCollectable.OnSpeedCollectable += UpdateSpeed;
     }
 
+    void UpdateSpeed(float Speed, float Duration)
+    {
+        speed = Speed;
+        timeToResetSpeedToDefault = Time.time + Duration;
+        StartSpeedResetCountDown = true;
+    }
 
     // Update is called once per frame
     void Update()
@@ -46,6 +62,12 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
+
+        if(StartSpeedResetCountDown && Time.time >= timeToResetSpeedToDefault)
+        {
+            speed = defaultSpeed;
+            StartSpeedResetCountDown = false;
+        }
     }
 
     void DisablePlayerController()
@@ -56,5 +78,6 @@ public class PlayerMovement : MonoBehaviour
     void OnDisable()
     {
         PlayerHealth.OnPlayerDied -= DisablePlayerController;
+        SpeedCollectable.OnSpeedCollectable -= UpdateSpeed;
     }
 }

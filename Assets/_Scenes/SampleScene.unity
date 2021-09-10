@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 84184419}
   - component: {fileID: 84184423}
   m_Layer: 5
-  m_Name: Damage Effect
+  m_Name: Healthbar Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10918,6 +10918,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 526821060}
   m_CullTransparentMesh: 0
+--- !u!1 &528101953
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 528101955}
+  - component: {fileID: 528101954}
+  m_Layer: 0
+  m_Name: Spawn Collectibles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &528101954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528101953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dddbe79c455c6c4ab13d87a86d55dfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpawnAreaRadius: 45
+  SpawnMaxHeight: 40
+  Collectibles:
+  - {fileID: 913025473155414585, guid: 01b34a51047dd7d4e85dec50e0d803ec, type: 3}
+  - {fileID: 913025473155414585, guid: 2312a8daaf8734a44936f3f9a7bdc938, type: 3}
+  SpawnDelayMin: 10
+  SpawnDelayMax: 15
+--- !u!4 &528101955
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 528101953}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -45.2, y: 93.4, z: -29.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &550208260
 GameObject:
   m_ObjectHideFlags: 0
@@ -19847,6 +19897,69 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &935446662 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3824942224974548022, guid: efa8d5725a0c1f14aa36ff4374c9dd07,
+    type: 3}
+  m_PrefabInstance: {fileID: 3824942224890556803}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &946912272
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 946912273}
+  - component: {fileID: 946912275}
+  - component: {fileID: 946912274}
+  m_Layer: 10
+  m_Name: Collect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &946912273
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946912272}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 935446662}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &946912274
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946912272}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.71, y: 7.36, z: 3.82}
+  m_Center: {x: 0.8, y: -2.78, z: 0}
+--- !u!114 &946912275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946912272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c91d7dacbdb8b845afbb532cb220af8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1041375813
 GameObject:
   m_ObjectHideFlags: 0
@@ -41991,8 +42104,8 @@ MonoBehaviour:
   RightGunParticle: {fileID: 5969193208716882397}
   KnifeParticle: {fileID: 0}
   ShootSFXPlayer: {fileID: 5969193207794509517}
-  AttackDamage: 1
-  MissShotPercentage: 1
+  AttackDamage: 20
+  MissShotPercentage: 0.235
 --- !u!33 &3114128458155894470
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -42049,7 +42162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4fd813b5d7727a4bb90eed8c093fcfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 50
+  health: 10
   DamageParticle: {fileID: 4681900419270097141}
 --- !u!195 &3114128458155894475
 NavMeshAgent:

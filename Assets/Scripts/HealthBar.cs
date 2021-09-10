@@ -14,6 +14,7 @@ public class HealthBar : MonoBehaviour
     void OnEnable()
     {
         PlayerHealth.OnPlayerDamaged += UpdateHealthBar;
+        PlayerHealth.OnPlayerHealed += UpdateHealthBar;
     }
 
     void UpdateHealthBar(float UpdatedHealth)
@@ -22,6 +23,7 @@ public class HealthBar : MonoBehaviour
     }
     void OnDisable()
     {
-        PlayerHealth.OnPlayerDamaged += UpdateHealthBar;
+        PlayerHealth.OnPlayerDamaged -= UpdateHealthBar;
+        PlayerHealth.OnPlayerHealed -= UpdateHealthBar;
     }
 }

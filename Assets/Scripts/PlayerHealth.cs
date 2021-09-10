@@ -12,6 +12,11 @@ public class PlayerHealth : MonoBehaviour
     {
         health = MaxHealth;
     }
+
+    void OnEnable()
+    {
+        HealthCollectable.OnHealthCollectableUsed += Heal;
+    }
     public void TakeDamage(float amount)
     {
         health -= amount;
@@ -27,7 +32,7 @@ public class PlayerHealth : MonoBehaviour
     public void Heal(float amount)
     {
         health += amount;
-        OnPlayerDamaged?.Invoke(health / MaxHealth);
+        OnPlayerHealed?.Invoke(health / MaxHealth);
     }
 
 
@@ -37,6 +42,12 @@ public class PlayerHealth : MonoBehaviour
         OnPlayerDied?.Invoke();
     }
 
+    void OnDisable()
+    {
+        HealthCollectable.OnHealthCollectableUsed -= Heal;
+    }
+
     public static Action<float> OnPlayerDamaged;
+    public static Action<float> OnPlayerHealed;
     public static Action OnPlayerDied;
 }
