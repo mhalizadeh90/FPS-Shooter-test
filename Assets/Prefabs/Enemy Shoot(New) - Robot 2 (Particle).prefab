@@ -80,12 +80,7 @@ MonoBehaviour:
   ShootSFXPlayer: {fileID: 5969193207795554965}
   AttackDamage: 5
   MissShotPercentage: 0
-  aIBrains:
-  - {fileID: 11400000, guid: 59fad39cb9eaeb84d9a1e5f0c7c25f7c, type: 2}
-  - {fileID: 11400000, guid: c828ba99dc2df464f9cc9632585cb062, type: 2}
-  - {fileID: 11400000, guid: 22dc2a2e972db7c4691fd227cbf0ce97, type: 2}
-  - {fileID: 11400000, guid: 5b7481a88a28db0449fed75c3cf7730d, type: 2}
-  - {fileID: 11400000, guid: 28cb6139798c3724390e33bf4d6dd5cc, type: 2}
+  aIBrains: {fileID: 11400000, guid: 1bc276167ae68484aa0c038d586ae9b8, type: 2}
 --- !u!195 &3114128458154842771
 NavMeshAgent:
   m_ObjectHideFlags: 0

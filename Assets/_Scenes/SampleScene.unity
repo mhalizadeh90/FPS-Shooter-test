@@ -17082,7 +17082,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - enemyCount: 50
+  - enemyCount: 3
+    timeBetweenSpawns: 1
+  - enemyCount: 3
+    timeBetweenSpawns: 1
+  - enemyCount: 3
+    timeBetweenSpawns: 1
+  - enemyCount: 3
+    timeBetweenSpawns: 1
+  - enemyCount: 3
     timeBetweenSpawns: 1
   Enemies:
   - {fileID: 5908601346358461100, guid: 0dc7e0d299b74804cbcf6fd8c4a1081a, type: 3}
@@ -27689,7 +27697,7 @@ MonoBehaviour:
   ShootSFXPlayer: {fileID: 5969193207794509517}
   AttackDamage: 20
   MissShotPercentage: 0.235
-  aIBrains: []
+  aIBrains: {fileID: 0}
 --- !u!33 &3114128458155894470
 MeshFilter:
   m_ObjectHideFlags: 0

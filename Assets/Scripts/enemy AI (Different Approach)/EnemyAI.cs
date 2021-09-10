@@ -39,7 +39,7 @@ public class EnemyAI : MonoBehaviour
     [Range(0, 1)] public float MissShotPercentage;
     private const float shootOffsetToPlayer = 5;
 
-    public AIBrain[] aIBrains;
+    public AIBrain aIBrains;
 
     Health EnemyHealth;
 
@@ -182,27 +182,15 @@ public class EnemyAI : MonoBehaviour
 
     public void ActivateAIBrainBasedOnDificultyWave(int Wave)
     {
-        AIBrain selectedAIBrain = SelectAIBrainBasedOnWave(Wave);
-        sightRange = selectedAIBrain.SightRange;
-        attackRange = selectedAIBrain.AttackRange;
-        MissShotPercentage = selectedAIBrain.MissShotPercentage;
-        agent.acceleration = selectedAIBrain.MaxAcceleration;
-        agent.speed = selectedAIBrain.MaxSpeed;
-        EnemyHealth.health = selectedAIBrain.MaxHealth;
-        AttackDamage = selectedAIBrain.AttackDamage;
+        sightRange = aIBrains.SightRange + (aIBrains.SightRange* aIBrains.SightRangeUpdateStep * Wave);
+        attackRange = aIBrains.AttackRange + (aIBrains.AttackRange * aIBrains.AttackRangeUpdateStep * Wave);
+        MissShotPercentage = Mathf.Clamp(aIBrains.MissShotPercentage + (aIBrains.MissShotPercentage * aIBrains.MissShotPercentageUpdateStep * Wave),0,1);
+        agent.acceleration = aIBrains.MaxAcceleration + (aIBrains.MaxAcceleration * aIBrains.MaxAccelerationUpdateStep * Wave);
+        agent.speed = aIBrains.MaxSpeed + (aIBrains.MaxSpeed * aIBrains.MaxSpeedUpdateStep * Wave);
+        EnemyHealth.health = aIBrains.MaxHealth + (aIBrains.MaxHealth * aIBrains.MaxHealthUpdateStep * Wave);
+        AttackDamage = aIBrains.AttackDamage + (aIBrains.AttackDamage * aIBrains.AttackDamageUpdateStep * Wave);
     }
 
-private AIBrain SelectAIBrainBasedOnWave(int Wave)
-    {
-        AIBrain selectedAIBrain;
-
-        if (Wave >= aIBrains.Length)
-            selectedAIBrain = aIBrains[aIBrains.Length - 1];
-        else
-            selectedAIBrain = aIBrains[Wave];
-
-        return selectedAIBrain;
-    }
 
     void OnDrawGizmosSelected()
     {
