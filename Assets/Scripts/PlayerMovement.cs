@@ -15,6 +15,12 @@ public class PlayerMovement : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
 
+    void OnEnable()
+    {
+        PlayerHealth.OnPlayerDied += DisablePlayerController;
+    }
+
+
     // Update is called once per frame
     void Update()
     {
@@ -40,5 +46,15 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    void DisablePlayerController()
+    {
+        controller.enabled = false;
+    }
+
+    void OnDisable()
+    {
+        PlayerHealth.OnPlayerDied -= DisablePlayerController;
     }
 }

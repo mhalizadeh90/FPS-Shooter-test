@@ -46,7 +46,7 @@ public class Pistol : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(KnifeSpherePoint.position, knifeSphereRadius, shootableLayer);
         foreach (Collider hit in hits)
         {
-            Target target = hit.transform.GetComponent<Target>();
+            Health target = hit.transform.GetComponent<Health>();
             if (target != null)
             {
                 target.TakeDamage(knifeDamage, hit.transform.position);
@@ -73,7 +73,7 @@ public class Pistol : MonoBehaviour
         {
             
             // Debug.Log(hit.transform.name);
-            Target target = hit.transform.GetComponent<Target>();
+            Health target = hit.transform.GetComponent<Health>();
             if (target != null)
             {
                 target.TakeDamage(damage, hit.point);

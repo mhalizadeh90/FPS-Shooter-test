@@ -24,7 +24,7 @@ public class Spawner : MonoBehaviour
 
     void OnEnable()
     {
-        Target.onEnemyDied += CalculateDiedEnemy;
+        Health.onEnemyDied += CalculateDiedEnemy;
     }
 
     void CalculateDiedEnemy()
@@ -95,7 +95,7 @@ public class Spawner : MonoBehaviour
 
     void OnDisable()
     {
-        Target.onEnemyDied -= CalculateDiedEnemy;
+        Health.onEnemyDied -= CalculateDiedEnemy;
     }
 
     public static Action<int> OnWaveChanged;

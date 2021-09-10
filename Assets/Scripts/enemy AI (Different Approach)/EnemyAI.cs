@@ -34,6 +34,11 @@ public class EnemyAI : MonoBehaviour
     public ParticleSystem KnifeParticle;
 
     public AudioSource ShootSFXPlayer;
+    public float AttackDamage;
+
+    [Range(0, 1)] public float MissShotPercentage;
+
+
     void Awake()
     {
         Player = GameObject.FindWithTag("Player").transform;
@@ -75,15 +80,6 @@ public class EnemyAI : MonoBehaviour
     {
         // calculate random point in range
 
-        //Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * walkPopintRange;
-        //randomDirection += transform.position;
-        //NavMeshHit hit;
-        //NavMesh.SamplePosition(randomDirection, out hit, walkPopintRange, 1);
-        //walkPoint = hit.position;
-        //walkPointSet = true;
-
-        //===========
-
         float randomZ = UnityEngine.Random.Range(-walkPopintRange, walkPopintRange);
         float randomX = UnityEngine.Random.Range(-walkPopintRange, walkPopintRange);
 
@@ -123,6 +119,24 @@ public class EnemyAI : MonoBehaviour
             {
                 LeftGunParticle.Play();
                 RightGunParticle.Play();
+               
+                RaycastHit hit;
+
+                Vector3 aimDirection = (Player.transform.position - transform.position).normalized;
+                
+                aimDirection.y += UnityEngine.Random.Range(0, MissShotPercentage);
+                aimDirection.x += UnityEngine.Random.Range(0, MissShotPercentage);
+                aimDirection.z += UnityEngine.Random.Range(0, MissShotPercentage);
+
+                bool isPlayerGetShot = Physics.Raycast(transform.position, aimDirection, out hit, 100, WhatIsPlayer);
+
+                if (isPlayerGetShot)
+                {
+                    Debug.Log("Damage: "+ hit.transform.name +" ["+AttackDamage+"]");
+                    PlayerHealth target = hit.transform.GetComponent<PlayerHealth>();
+                    target?.TakeDamage(AttackDamage);
+                }
+
                 //TODO: RAYCAST FOR SHOOT AND THEN DAMAGE IF HITT THE PLAYER
             }
             else
