@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -1492521250914861175}
   - component: {fileID: 9091933857855743240}
   m_Layer: 11
-  m_Name: Collictable
+  m_Name: Health Collictable
   m_TagString: Collectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
