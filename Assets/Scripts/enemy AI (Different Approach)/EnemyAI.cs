@@ -4,67 +4,67 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
+    #region Fields
+
+    [SerializeField] AIBrain aiBrain;
     public NavMeshAgent agent;
 
-    public Transform Player;
-    protected PlayerHealth playerHealth;
 
-    public LayerMask WhatisGround, WhatIsPlayer, obstacle;
-    public float GroundRaycastDistance = 0.1f;
+    [SerializeField] LayerMask WhatisGround, WhatIsPlayer, obstacle;
+    [SerializeField] float GroundRaycastDistance = 0.1f;
 
     // patroling
-    public Vector3 walkPoint;
+    Vector3 walkPoint;
     bool walkPointSet;
-    public float walkPopintRange;
-    public float TimeForChangeWalkPoint = 5;
-    float nextChangeWalkPoint = 0;
+    [SerializeField] float patrolingDistanceRange;
+    [SerializeField] float MaxDurationOfEachPatrolingCycle = 5;
+    float nextTimeForChangingWalkPoint = 0;
+
     // attacking
     public float timeBetweenAttacks;
-    protected bool alreadyAttacked;
+    protected bool isAlreadyInAttackedState;
+    float AttackDamage;
+    float missShotPercentage;
+    protected const float attackRangeOffset = 5;
 
     //States
-    public float sightRange, attackRange;
-    public bool playerInSightRange, PlayerInAttackRange;
+    float sightRange, attackRange;
+    bool playerInSightRange, PlayerInAttackRange;
 
-
-   // public bool isGunner;
-    public GameObject Projectile;
-
-
-    public AudioSource ShootSFXPlayer;
-    public float AttackDamage;
-
-    [Range(0, 1)] public float MissShotPercentage;
-    protected const float shootOffsetToPlayer = 5;
-
-    public AIBrain aIBrains;
-
+    Transform playerPosition;
+    protected PlayerHealth playerHealth;
     Health EnemyHealth;
+    
+    [SerializeField] protected AudioSource AttackAudioPlayer;
+
+    #endregion
 
     void Awake()
     {
-        Player = GameObject.FindObjectOfType<PlayerMovement>().transform;
-        playerHealth = Player.GetComponent<PlayerHealth>();
+        playerPosition = GameObject.FindObjectOfType<PlayerMovement>().transform;
+        playerHealth = playerPosition.GetComponent<PlayerHealth>();
         EnemyHealth = GetComponent<Health>();
-        //agent = GetComponent<NavMeshAgent>();
     }
 
     void Update()
     {
-        //Chcle for sight and attack range
-        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, WhatIsPlayer);
-        PlayerInAttackRange = Physics.CheckSphere(transform.position, attackRange, WhatIsPlayer);
-
-        #region When Duraing the chase, Player hide behind the obstacle then chase mode switch to patrol
-
-        if (playerInSightRange)
-            playerInSightRange = !Physics.Linecast(transform.position, Player.transform.position, obstacle);
-
-        #endregion
+        CheckForSightRange();
+        CheckForAttackRange();
 
         if (!playerInSightRange && !PlayerInAttackRange) Patroling();
         if (playerInSightRange && !PlayerInAttackRange) ChasePlayer();
         if (PlayerInAttackRange && playerInSightRange) Attack();
+    }
+
+    private void CheckForSightRange()
+    {
+        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, WhatIsPlayer);
+        if (playerInSightRange) playerInSightRange = !Physics.Linecast(transform.position, playerPosition.transform.position, obstacle);
+    }
+
+    private void CheckForAttackRange()
+    {
+        PlayerInAttackRange = Physics.CheckSphere(transform.position, attackRange, WhatIsPlayer);
     }
 
     void Patroling()
@@ -76,7 +76,7 @@ public class EnemyAI : MonoBehaviour
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
-        if (distanceToWalkPoint.sqrMagnitude < 5 || nextChangeWalkPoint < Time.time)
+        if (distanceToWalkPoint.sqrMagnitude < 5 || nextTimeForChangingWalkPoint < Time.time)
             walkPointSet = false;
     }
 
@@ -84,22 +84,22 @@ public class EnemyAI : MonoBehaviour
     {
         // calculate random point in range
 
-        float randomZ = UnityEngine.Random.Range(-walkPopintRange, walkPopintRange);
-        float randomX = UnityEngine.Random.Range(-walkPopintRange, walkPopintRange);
+        float randomZ = UnityEngine.Random.Range(-patrolingDistanceRange, patrolingDistanceRange);
+        float randomX = UnityEngine.Random.Range(-patrolingDistanceRange, patrolingDistanceRange);
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
 
         if (Physics.Raycast(walkPoint, -transform.up, GroundRaycastDistance, WhatisGround))
         {
             walkPointSet = true;
-            nextChangeWalkPoint = TimeForChangeWalkPoint + Time.time;
+            nextTimeForChangingWalkPoint = MaxDurationOfEachPatrolingCycle + Time.time;
         }
     }
 
     protected void StandStillAndLookAtPlayer()
     {
         agent.SetDestination(transform.position);
-        transform.LookAt(Player);
+        transform.LookAt(playerPosition);
     }
 
     protected void AimAndAttack()
@@ -110,13 +110,13 @@ public class EnemyAI : MonoBehaviour
 
     protected void SetNextAttackTimeBasedOnFireRate()
     {
-        alreadyAttacked = true;
+        isAlreadyInAttackedState = true;
         Invoke(nameof(ResetAttack), timeBetweenAttacks);
     }
 
     void ChasePlayer()
     {
-        agent.SetDestination(Player.position);
+        agent.SetDestination(playerPosition.position);
     }
 
     public virtual void Attack()
@@ -126,11 +126,11 @@ public class EnemyAI : MonoBehaviour
 
     protected Vector3 GetAimDirection()
     {
-        Vector3 aimDirection = (Player.transform.position - transform.position).normalized;
+        Vector3 aimDirection = (playerPosition.transform.position - transform.position).normalized;
 
-        aimDirection.y += UnityEngine.Random.Range(0, MissShotPercentage);
-        aimDirection.x += UnityEngine.Random.Range(0, MissShotPercentage);
-        aimDirection.z += UnityEngine.Random.Range(0, MissShotPercentage);
+        aimDirection.y += UnityEngine.Random.Range(0, missShotPercentage);
+        aimDirection.x += UnityEngine.Random.Range(0, missShotPercentage);
+        aimDirection.z += UnityEngine.Random.Range(0, missShotPercentage);
 
         return aimDirection;
     }
@@ -138,7 +138,7 @@ public class EnemyAI : MonoBehaviour
     protected bool isPlayerGetShot(Vector3 ShootDirection)
     {
         RaycastHit hit;
-        return(Physics.Raycast(transform.position, ShootDirection, out hit, attackRange + shootOffsetToPlayer, WhatIsPlayer));
+        return(Physics.Raycast(transform.position, ShootDirection, out hit, attackRange + attackRangeOffset, WhatIsPlayer));
     }
 
     //void AttackPlayer()
@@ -210,18 +210,18 @@ public class EnemyAI : MonoBehaviour
 
     protected void ResetAttack()
     {
-        alreadyAttacked = false;
+        isAlreadyInAttackedState = false;
     }
 
     public void ActivateAIBrainBasedOnDificultyWave(int Wave)
     {
-        sightRange = aIBrains.SightRange + (aIBrains.SightRange* aIBrains.SightRangeUpdateStep * Wave);
-        attackRange = aIBrains.AttackRange + (aIBrains.AttackRange * aIBrains.AttackRangeUpdateStep * Wave);
-        MissShotPercentage = Mathf.Clamp(aIBrains.MissShotPercentage + (aIBrains.MissShotPercentage * aIBrains.MissShotPercentageUpdateStep * Wave),0,1);
-        agent.acceleration = aIBrains.MaxAcceleration + (aIBrains.MaxAcceleration * aIBrains.MaxAccelerationUpdateStep * Wave);
-        agent.speed = aIBrains.MaxSpeed + (aIBrains.MaxSpeed * aIBrains.MaxSpeedUpdateStep * Wave);
-        EnemyHealth.health = aIBrains.MaxHealth + (aIBrains.MaxHealth * aIBrains.MaxHealthUpdateStep * Wave);
-        AttackDamage = aIBrains.AttackDamage + (aIBrains.AttackDamage * aIBrains.AttackDamageUpdateStep * Wave);
+        sightRange = aiBrain.SightRange + (aiBrain.SightRange* aiBrain.SightRangeUpdateStep * Wave);
+        attackRange = aiBrain.AttackRange + (aiBrain.AttackRange * aiBrain.AttackRangeUpdateStep * Wave);
+        missShotPercentage = Mathf.Clamp(aiBrain.MissShotPercentage + (aiBrain.MissShotPercentage * aiBrain.MissShotPercentageUpdateStep * Wave),0,1);
+        agent.acceleration = aiBrain.MaxAcceleration + (aiBrain.MaxAcceleration * aiBrain.MaxAccelerationUpdateStep * Wave);
+        agent.speed = aiBrain.MaxSpeed + (aiBrain.MaxSpeed * aiBrain.MaxSpeedUpdateStep * Wave);
+        EnemyHealth.health = aiBrain.MaxHealth + (aiBrain.MaxHealth * aiBrain.MaxHealthUpdateStep * Wave);
+        AttackDamage = aiBrain.AttackDamage + (aiBrain.AttackDamage * aiBrain.AttackDamageUpdateStep * Wave);
     }
 
 

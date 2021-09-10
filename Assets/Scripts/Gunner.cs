@@ -11,10 +11,10 @@ public class Gunner : EnemyAI
     {
         StandStillAndLookAtPlayer();
 
-        if (!alreadyAttacked)
+        if (!isAlreadyInAttackedState)
         {
             ShowGunsParticles();
-            ShootSFXPlayer.Play();
+            AttackAudioPlayer.Play();
 
             AimAndAttack();
 

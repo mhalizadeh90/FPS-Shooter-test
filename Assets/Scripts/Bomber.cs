@@ -9,10 +9,10 @@ public class Bomber : EnemyAI
     {
         StandStillAndLookAtPlayer();
 
-        if (!alreadyAttacked)
+        if (!isAlreadyInAttackedState)
         {
             BombParticle.Play();
-            ShootSFXPlayer.Play();
+            AttackAudioPlayer.Play();
 
             AimAndAttack();
             SetNextAttackTimeBasedOnFireRate();
