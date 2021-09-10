@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bomber : EnemyAI
 {
     [SerializeField] ParticleSystem BombParticle;
-    public override void Attack()
+    public override void AttackState()
     {
         StandStillAndLookAtPlayer();
 
@@ -15,7 +15,7 @@ public class Bomber : EnemyAI
             AttackAudioPlayer.Play();
 
             AimAndAttack();
-            SetNextAttackTimeBasedOnFireRate();
+            UpdateNextAttackTimeBasedOnFireRate();
         }
     }
 

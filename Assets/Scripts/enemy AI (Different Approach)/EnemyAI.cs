@@ -15,10 +15,12 @@ public class EnemyAI : MonoBehaviour
 
     // patroling
     Vector3 walkPoint;
-    bool walkPointSet;
+    bool isWalkPointSet;
     [SerializeField] float patrolingDistanceRange;
     [SerializeField] float MaxDurationOfEachPatrolingCycle = 5;
     float nextTimeForChangingWalkPoint = 0;
+    private const float minimumDistanceToWalkPoint = 5;
+
 
     // attacking
     public float timeBetweenAttacks;
@@ -44,6 +46,7 @@ public class EnemyAI : MonoBehaviour
         playerPosition = GameObject.FindObjectOfType<PlayerMovement>().transform;
         playerHealth = playerPosition.GetComponent<PlayerHealth>();
         EnemyHealth = GetComponent<Health>();
+        SetAIBrainBasedOnDificultyLevel();
     }
 
     void Update()
@@ -51,49 +54,80 @@ public class EnemyAI : MonoBehaviour
         CheckForSightRange();
         CheckForAttackRange();
 
-        if (!playerInSightRange && !PlayerInAttackRange) Patroling();
-        if (playerInSightRange && !PlayerInAttackRange) ChasePlayer();
-        if (PlayerInAttackRange && playerInSightRange) Attack();
+        RunStateMachine();
+    }
+
+    private void RunStateMachine()
+    {
+        if (!playerInSightRange && !PlayerInAttackRange) PatrolState();
+        if (playerInSightRange && !PlayerInAttackRange) ChaseState();
+        if (PlayerInAttackRange && playerInSightRange) AttackState();
     }
 
     private void CheckForSightRange()
     {
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, WhatIsPlayer);
+       
+        // Check If there is not obstacle between Player and Enemy
         if (playerInSightRange) playerInSightRange = !Physics.Linecast(transform.position, playerPosition.transform.position, obstacle);
     }
 
     private void CheckForAttackRange()
     {
         PlayerInAttackRange = Physics.CheckSphere(transform.position, attackRange, WhatIsPlayer);
+        
+        // Check If there is not obstacle between Player and Enemy
+        if (PlayerInAttackRange) playerInSightRange = !Physics.Linecast(transform.position, playerPosition.transform.position, obstacle);
     }
 
-    void Patroling()
+    void PatrolState()
     {
-        if (!walkPointSet) SearchWalkPoint();
+        if (isWalkPointSet) agent.SetDestination(walkPoint);
+        else SetAWalkPoint();
 
-        if (walkPointSet)
-            agent.SetDestination(walkPoint);
+        CheckIfAgentReachedToWalkPoint();
+    }
 
+    void ChaseState()
+    {
+        agent.SetDestination(playerPosition.position);
+    }
+
+    public virtual void AttackState()
+    {
+        //ENEMY ATTACK
+    }
+
+    private void CheckIfAgentReachedToWalkPoint()
+    {
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
-        if (distanceToWalkPoint.sqrMagnitude < 5 || nextTimeForChangingWalkPoint < Time.time)
-            walkPointSet = false;
+        if (distanceToWalkPoint.sqrMagnitude < minimumDistanceToWalkPoint || nextTimeForChangingWalkPoint < Time.time)
+            isWalkPointSet = false;
     }
 
-    private void SearchWalkPoint()
+    private void SetAWalkPoint()
     {
-        // calculate random point in range
+        walkPoint = GetARandomPointInPatrolingRange();
 
+        if (IsWalkPointOnTheGround())
+        {
+            isWalkPointSet = true;
+            nextTimeForChangingWalkPoint = MaxDurationOfEachPatrolingCycle + Time.time;
+        }
+    }
+
+    private bool IsWalkPointOnTheGround()
+    {
+        return Physics.Raycast(walkPoint, -transform.up, GroundRaycastDistance, WhatisGround);
+    }
+
+    private Vector3 GetARandomPointInPatrolingRange()
+    {
         float randomZ = UnityEngine.Random.Range(-patrolingDistanceRange, patrolingDistanceRange);
         float randomX = UnityEngine.Random.Range(-patrolingDistanceRange, patrolingDistanceRange);
 
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
-
-        if (Physics.Raycast(walkPoint, -transform.up, GroundRaycastDistance, WhatisGround))
-        {
-            walkPointSet = true;
-            nextTimeForChangingWalkPoint = MaxDurationOfEachPatrolingCycle + Time.time;
-        }
+        return new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
     }
 
     protected void StandStillAndLookAtPlayer()
@@ -105,26 +139,16 @@ public class EnemyAI : MonoBehaviour
     protected void AimAndAttack()
     {
         Vector3 aimDirection = GetAimDirection();
-        if (isPlayerGetShot(aimDirection)) playerHealth?.TakeDamage(AttackDamage);
+        if (isAimingRaycastHittedToPlayer(aimDirection)) playerHealth?.TakeDamage(AttackDamage);
     }
 
-    protected void SetNextAttackTimeBasedOnFireRate()
+    protected void UpdateNextAttackTimeBasedOnFireRate()
     {
         isAlreadyInAttackedState = true;
         Invoke(nameof(ResetAttack), timeBetweenAttacks);
     }
 
-    void ChasePlayer()
-    {
-        agent.SetDestination(playerPosition.position);
-    }
-
-    public virtual void Attack()
-    {
-        //ENEMY ATTACK
-    }
-
-    protected Vector3 GetAimDirection()
+    Vector3 GetAimDirection()
     {
         Vector3 aimDirection = (playerPosition.transform.position - transform.position).normalized;
 
@@ -135,95 +159,27 @@ public class EnemyAI : MonoBehaviour
         return aimDirection;
     }
 
-    protected bool isPlayerGetShot(Vector3 ShootDirection)
+    bool isAimingRaycastHittedToPlayer(Vector3 ShootDirection)
     {
         RaycastHit hit;
         return(Physics.Raycast(transform.position, ShootDirection, out hit, attackRange + attackRangeOffset, WhatIsPlayer));
     }
 
-    //void AttackPlayer()
-    //{
-    //    // Make sure enemy doesnt move
-    //    agent.SetDestination(transform.position);
-
-    //    transform.LookAt(Player);
-
-    //    if(!alreadyAttacked)
-    //    {
-    //        #region Attack Code
-    //        //TODO: REFACTOR
-    //        // for gunner
-    //        if(isGunner)
-    //        {
-    //            LeftGunParticle.Play();
-    //            RightGunParticle.Play();
-
-    //            RaycastHit hit;
-
-    //            Vector3 aimDirection = (Player.transform.position - transform.position).normalized;
-
-    //            aimDirection.y += UnityEngine.Random.Range(0, MissShotPercentage);
-    //            aimDirection.x += UnityEngine.Random.Range(0, MissShotPercentage);
-    //            aimDirection.z += UnityEngine.Random.Range(0, MissShotPercentage);
-
-    //            bool isPlayerGetShot = Physics.Raycast(transform.position, aimDirection, out hit, attackRange + shootOffsetToPlayer, WhatIsPlayer);
-
-    //            if (isPlayerGetShot)
-    //            {
-    //                Debug.Log("Damage: "+ hit.transform.name +" ["+AttackDamage+"]");
-    //                PlayerHealth target = hit.transform.GetComponent<PlayerHealth>();
-    //                target?.TakeDamage(AttackDamage);
-    //            }
-
-    //            //TODO: RAYCAST FOR SHOOT AND THEN DAMAGE IF HITT THE PLAYER
-    //        }
-    //        else
-    //        {
-    //            KnifeParticle.Play();
-    //            //TODO: RAYCAST FOR KNIFE AND THEN DAMAGE IF HITT THE PLAYER
-    //            RaycastHit hit;
-
-    //            Vector3 aimDirection = (Player.transform.position - transform.position).normalized;
-
-    //            aimDirection.y += UnityEngine.Random.Range(0, MissShotPercentage);
-    //            aimDirection.x += UnityEngine.Random.Range(0, MissShotPercentage);
-    //            aimDirection.z += UnityEngine.Random.Range(0, MissShotPercentage);
-
-    //            bool isPlayerGetShot = Physics.Raycast(transform.position, aimDirection, out hit, attackRange + shootOffsetToPlayer, WhatIsPlayer);
-
-    //            if (isPlayerGetShot)
-    //            {
-    //                Debug.Log("Damage: " + hit.transform.name + " [" + AttackDamage + "]");
-    //                PlayerHealth target = hit.transform.GetComponent<PlayerHealth>();
-    //                target?.TakeDamage(AttackDamage);
-    //            }
-    //        }
-
-    //        ShootSFXPlayer.Play();
-
-    //        #endregion
-
-    //        alreadyAttacked = true;
-    //        Invoke(nameof(ResetAttack), timeBetweenAttacks);
-    //    }
-    //}
-
-    protected void ResetAttack()
+    void ResetAttack()
     {
         isAlreadyInAttackedState = false;
     }
 
-    public void ActivateAIBrainBasedOnDificultyWave(int Wave)
+    public void SetAIBrainBasedOnDificultyLevel(int DifficulityLevel = 0)
     {
-        sightRange = aiBrain.SightRange + (aiBrain.SightRange* aiBrain.SightRangeUpdateStep * Wave);
-        attackRange = aiBrain.AttackRange + (aiBrain.AttackRange * aiBrain.AttackRangeUpdateStep * Wave);
-        missShotPercentage = Mathf.Clamp(aiBrain.MissShotPercentage + (aiBrain.MissShotPercentage * aiBrain.MissShotPercentageUpdateStep * Wave),0,1);
-        agent.acceleration = aiBrain.MaxAcceleration + (aiBrain.MaxAcceleration * aiBrain.MaxAccelerationUpdateStep * Wave);
-        agent.speed = aiBrain.MaxSpeed + (aiBrain.MaxSpeed * aiBrain.MaxSpeedUpdateStep * Wave);
-        EnemyHealth.health = aiBrain.MaxHealth + (aiBrain.MaxHealth * aiBrain.MaxHealthUpdateStep * Wave);
-        AttackDamage = aiBrain.AttackDamage + (aiBrain.AttackDamage * aiBrain.AttackDamageUpdateStep * Wave);
+        sightRange = aiBrain.SightRange + (aiBrain.SightRange * aiBrain.SightRangeUpdateStep * DifficulityLevel);
+        attackRange = aiBrain.AttackRange + (aiBrain.AttackRange * aiBrain.AttackRangeUpdateStep * DifficulityLevel);
+        missShotPercentage = Mathf.Clamp(aiBrain.MissShotPercentage + (aiBrain.MissShotPercentage * aiBrain.MissShotPercentageUpdateStep * DifficulityLevel), 0, 1);
+        agent.acceleration = aiBrain.MaxAcceleration + (aiBrain.MaxAcceleration * aiBrain.MaxAccelerationUpdateStep * DifficulityLevel);
+        agent.speed = aiBrain.MaxSpeed + (aiBrain.MaxSpeed * aiBrain.MaxSpeedUpdateStep * DifficulityLevel);
+        EnemyHealth.health = aiBrain.MaxHealth + (aiBrain.MaxHealth * aiBrain.MaxHealthUpdateStep * DifficulityLevel);
+        AttackDamage = aiBrain.AttackDamage + (aiBrain.AttackDamage * aiBrain.AttackDamageUpdateStep * DifficulityLevel);
     }
-
 
     void OnDrawGizmosSelected()
     {

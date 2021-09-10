@@ -148,8 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a57d64032eb8b44086770a787830330, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aiBrain: {fileID: 11400000, guid: 1bc276167ae68484aa0c038d586ae9b8, type: 2}
   agent: {fileID: 3114128458154842771}
-  Player: {fileID: 0}
   WhatisGround:
     serializedVersion: 2
     m_Bits: 256
@@ -160,19 +160,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   GroundRaycastDistance: 2
-  walkPoint: {x: 0, y: 0, z: 0}
-  walkPopintRange: 15
-  TimeForChangeWalkPoint: 5
+  patrolingDistanceRange: 15
+  MaxDurationOfEachPatrolingCycle: 5
   timeBetweenAttacks: 0.5
-  sightRange: 20
-  attackRange: 10
-  playerInSightRange: 0
-  PlayerInAttackRange: 0
-  Projectile: {fileID: 0}
-  ShootSFXPlayer: {fileID: 5969193207795554965}
-  AttackDamage: 5
-  MissShotPercentage: 0
-  aIBrains: {fileID: 11400000, guid: 1bc276167ae68484aa0c038d586ae9b8, type: 2}
+  AttackAudioPlayer: {fileID: 5969193207795554965}
   LeftGunParticle: {fileID: 5969193208008183346}
   RightGunParticle: {fileID: 5969193208715824517}
 --- !u!1 &4772832405493080853

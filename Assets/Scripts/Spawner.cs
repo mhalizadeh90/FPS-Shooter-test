@@ -61,7 +61,7 @@ public class Spawner : MonoBehaviour
             EnemyAI SpawnedEnemy = Instantiate(Enemies[UnityEngine.Random.Range(0, Enemies.Length)], GetRandomPosition(), Quaternion.identity).GetComponent<EnemyAI>();
 
             //TODO: SET AI DIFFICULTY BASED ON THE WAVE
-            SpawnedEnemy.ActivateAIBrainBasedOnDificultyWave(nextWaveNumber-1);
+            SpawnedEnemy.SetAIBrainBasedOnDificultyLevel(nextWaveNumber-1);
         }
     }
 

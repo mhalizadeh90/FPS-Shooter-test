@@ -7,22 +7,22 @@ public class Gunner : EnemyAI
     [SerializeField] ParticleSystem LeftGunParticle;
     [SerializeField] ParticleSystem RightGunParticle;
 
-    public override void Attack()
+    public override void AttackState()
     {
         StandStillAndLookAtPlayer();
 
         if (!isAlreadyInAttackedState)
         {
-            ShowGunsParticles();
+            PlayGunsParticles();
             AttackAudioPlayer.Play();
 
             AimAndAttack();
 
-            SetNextAttackTimeBasedOnFireRate();
+            UpdateNextAttackTimeBasedOnFireRate();
         }
     }
 
-    private void ShowGunsParticles()
+    private void PlayGunsParticles()
     {
         LeftGunParticle.Play();
         RightGunParticle.Play();

@@ -28797,7 +28797,7 @@ GameObject:
   - component: {fileID: 5908601346358461101}
   - component: {fileID: 232028913}
   m_Layer: 0
-  m_Name: Enemy Knife(New) - Robot (Particle)
+  m_Name: Enemy (Bomber)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28929,8 +28929,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6382afc1ca575b4eb33d33cfe529c20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aiBrain: {fileID: 11400000, guid: a2846e108dcc99147897654d0f840fe6, type: 2}
   agent: {fileID: 5908601346358461097}
-  Player: {fileID: 0}
   WhatisGround:
     serializedVersion: 2
     m_Bits: 256
@@ -28941,17 +28941,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   GroundRaycastDistance: 2
-  walkPoint: {x: 0, y: 0, z: 0}
-  walkPopintRange: 15
-  TimeForChangeWalkPoint: 5
+  patrolingDistanceRange: 15
+  MaxDurationOfEachPatrolingCycle: 5
   timeBetweenAttacks: 1
-  sightRange: 20
-  attackRange: 3
-  playerInSightRange: 0
-  PlayerInAttackRange: 0
-  Projectile: {fileID: 0}
-  ShootSFXPlayer: {fileID: 1358750196607177229}
-  AttackDamage: 10
-  MissShotPercentage: 0
-  aIBrains: {fileID: 11400000, guid: a2846e108dcc99147897654d0f840fe6, type: 2}
+  AttackAudioPlayer: {fileID: 1358750196607177229}
   BombParticle: {fileID: 2350866166534663461}

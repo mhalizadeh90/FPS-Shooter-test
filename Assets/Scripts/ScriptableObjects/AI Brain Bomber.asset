@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SightRange: 15
   SightRangeUpdateStep: 0.2
-  AttackRange: 1
+  AttackRange: 3
   AttackRangeUpdateStep: 0.2
   MaxHealth: 30
   MaxHealthUpdateStep: 0.4
