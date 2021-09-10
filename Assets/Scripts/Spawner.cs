@@ -9,7 +9,7 @@ public class Spawner : MonoBehaviour
     public GameObject[] Enemies;
 
     Wave currentWave;
-    int currentWaveNumber;
+    int nextWaveNumber;
 
     int enemiesReminingToSpawn;
     float nextSpawnTime;
@@ -40,7 +40,7 @@ public class Spawner : MonoBehaviour
 
         if (remainingEnemy == 0)
         {
-            if (currentWaveNumber < waves.Length)
+            if (nextWaveNumber < waves.Length)
                 NextWave();
             else
                 OnAllEnemiesKilled?.Invoke();
@@ -60,13 +60,9 @@ public class Spawner : MonoBehaviour
 
             EnemyAI SpawnedEnemy = Instantiate(Enemies[UnityEngine.Random.Range(0, Enemies.Length)], GetRandomPosition(), Quaternion.identity).GetComponent<EnemyAI>();
 
-            SetAIDifficulity(SpawnedEnemy);
+            //TODO: SET AI DIFFICULTY BASED ON THE WAVE
+            SpawnedEnemy.ActivateAIBrainBasedOnDificultyWave(nextWaveNumber-1);
         }
-    }
-
-    private void SetAIDifficulity(EnemyAI spawnedEnemy)
-    {
-        //TODO: SET AI DIFFICULTY BASED ON THE WAVE
     }
 
     private Vector3 GetRandomPosition()
@@ -87,16 +83,16 @@ public class Spawner : MonoBehaviour
 
     void NextWave()
     {
-        if (currentWaveNumber >= waves.Length)
+        if (nextWaveNumber >= waves.Length)
             return;
 
-        currentWaveNumber++;
-        currentWave = waves[currentWaveNumber - 1];
+        currentWave = waves[nextWaveNumber];
 
         enemiesReminingToSpawn = currentWave.enemyCount;
         remainingEnemy = enemiesReminingToSpawn;
         
-        OnWaveChanged?.Invoke(currentWaveNumber);
+        nextWaveNumber++;
+        OnWaveChanged?.Invoke(nextWaveNumber);
     }
 
 

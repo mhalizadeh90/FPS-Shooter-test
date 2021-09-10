@@ -10,5 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6eb3880b45598c49a9faa766ba098e0, type: 3}
-  m_Name: AI Brain Level 01
+  m_Name: AI Brain Bomber Level 01
   m_EditorClassIdentifier: 
+  SightRange: 15
+  AttackRange: 1
+  MaxHealth: 30
+  MaxSpeed: 6
+  MaxAcceleration: 8
+  MissShotPercentage: 0.4
+  AttackDamage: 1

@@ -39,9 +39,14 @@ public class EnemyAI : MonoBehaviour
     [Range(0, 1)] public float MissShotPercentage;
     private const float shootOffsetToPlayer = 5;
 
+    public AIBrain[] aIBrains;
+
+    Health EnemyHealth;
+
     void Awake()
     {
         Player = GameObject.FindWithTag("Player").transform;
+        EnemyHealth = GetComponent<Health>();
         //agent = GetComponent<NavMeshAgent>();
     }
 
@@ -175,6 +180,29 @@ public class EnemyAI : MonoBehaviour
         alreadyAttacked = false;
     }
 
+    public void ActivateAIBrainBasedOnDificultyWave(int Wave)
+    {
+        AIBrain selectedAIBrain = SelectAIBrainBasedOnWave(Wave);
+        sightRange = selectedAIBrain.SightRange;
+        attackRange = selectedAIBrain.AttackRange;
+        MissShotPercentage = selectedAIBrain.MissShotPercentage;
+        agent.acceleration = selectedAIBrain.MaxAcceleration;
+        agent.speed = selectedAIBrain.MaxSpeed;
+        EnemyHealth.health = selectedAIBrain.MaxHealth;
+        AttackDamage = selectedAIBrain.AttackDamage;
+    }
+
+private AIBrain SelectAIBrainBasedOnWave(int Wave)
+    {
+        AIBrain selectedAIBrain;
+
+        if (Wave >= aIBrains.Length)
+            selectedAIBrain = aIBrains[aIBrains.Length - 1];
+        else
+            selectedAIBrain = aIBrains[Wave];
+
+        return selectedAIBrain;
+    }
 
     void OnDrawGizmosSelected()
     {

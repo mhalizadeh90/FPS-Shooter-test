@@ -11,4 +11,5 @@ public class AIBrain : ScriptableObject
     public float MaxSpeed;
     public float MaxAcceleration;
     [Range(0, 1)] public float MissShotPercentage;
+    public float AttackDamage;
 }
