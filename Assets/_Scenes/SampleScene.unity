@@ -6836,6 +6836,12 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!4 &428732496 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3824942224497925367, guid: efa8d5725a0c1f14aa36ff4374c9dd07,
+    type: 3}
+  m_PrefabInstance: {fileID: 3824942224890556803}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &456214024
 Mesh:
   m_ObjectHideFlags: 0
@@ -7543,6 +7549,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &572479140
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 572479142}
+  - component: {fileID: 572479141}
+  m_Layer: 0
+  m_Name: Mouse View Input
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &572479141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 572479140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0734dd1264cf98e4aaab7e68532c8ee7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseSensetivity: 250
+  playerBody: {fileID: 2144609625}
+  Camera: {fileID: 428732496}
+--- !u!4 &572479142
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 572479140}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -75.49711, y: 2.838532, z: -34.442444}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &573420042
 GameObject:
@@ -21308,28 +21360,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1950783485}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17b9bde7963e6ae4b86f7f82d41d53f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ea989932c51fca48a558a2fd27ea5f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyWaves:
-  - enemyCount: 2
-    timeBetweenSpawns: 0.5
-  - enemyCount: 3
-    timeBetweenSpawns: 0.2
+  aiWaves:
+  - enemyCount: 1
+    timeBetweenSpawns: 1
   spawnPortals:
   - {fileID: 213673186}
   - {fileID: 1245145219}
-  Enemies:
-  - {fileID: 5908601346358461100, guid: 0dc7e0d299b74804cbcf6fd8c4a1081a, type: 3}
+  AIPrefabs:
   - {fileID: 3114128458154842768, guid: 1dd1b5539b2f5e84ea7bbf04a6c838d9, type: 3}
-  currentWave:
-    enemyCount: 0
-    timeBetweenSpawns: 0
-  nextWaveNumber: 0
-  nextSpawnTime: 0
-  remainingEnemiesToSpawn: 0
-  aliveEnemiesInThisWave: 0
-  playerPosition: {fileID: 0}
 --- !u!4 &1950783487
 Transform:
   m_ObjectHideFlags: 0
@@ -22121,6 +22162,12 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!4 &2144609625 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3824942224974548022, guid: efa8d5725a0c1f14aa36ff4374c9dd07,
+    type: 3}
+  m_PrefabInstance: {fileID: 3824942224890556803}
+  m_PrefabAsset: {fileID: 0}
 --- !u!23 &243858070546801835
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -65687,7 +65734,7 @@ PrefabInstance:
     - target: {fileID: 3114128458154842768, guid: 1dd1b5539b2f5e84ea7bbf04a6c838d9,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3114128458154842780, guid: 1dd1b5539b2f5e84ea7bbf04a6c838d9,
         type: 3}

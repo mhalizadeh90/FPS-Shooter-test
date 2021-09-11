@@ -28796,7 +28796,7 @@ GameObject:
   - component: {fileID: 5908601346358461102}
   - component: {fileID: 5908601346358461101}
   - component: {fileID: 232028913}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Enemy (Bomber)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28931,6 +28931,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aiBrain: {fileID: 11400000, guid: a2846e108dcc99147897654d0f840fe6, type: 2}
   agent: {fileID: 5908601346358461097}
+  DefaultAIBrainLevel: 0
   WhatisGround:
     serializedVersion: 2
     m_Bits: 256

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3114128458154842783}
   - component: {fileID: 3114128458154842770}
   - component: {fileID: 1647560450}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Enemy (Gunner)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aiBrain: {fileID: 11400000, guid: 1bc276167ae68484aa0c038d586ae9b8, type: 2}
   agent: {fileID: 3114128458154842771}
+  DefaultAIBrainLevel: 0
   WhatisGround:
     serializedVersion: 2
     m_Bits: 256
