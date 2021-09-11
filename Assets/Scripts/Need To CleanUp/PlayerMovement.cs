@@ -1,27 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public CharacterController controller;
+    #region Fiedls
 
+    [SerializeField] CharacterController controller;
+
+    // Properties for timed speed booser:
+    float playerDefaultSpeed;
+    float timeToResetPlayerSpeedToDefault;
+    bool startSpeedResetCountDown = false;
     [SerializeField] float speed = 12f;
-    float defaultSpeed;
-    float timeToResetSpeedToDefault;
-    bool StartSpeedResetCountDown = false;
+    [SerializeField] float jumpHeight = 3f;
+    [SerializeField] float gravity = -9.8f;
 
-    public float gravity = -9.8f;
-    public float jumpHeight = 3f;
-    public Transform groundCheck;
-    public float groundDistance = 0.4f;
-    public LayerMask groundMask;
-    Vector3 velocity;
+    [SerializeField] Transform groundCheckPosition;
+    [SerializeField] float groundDistance = 0.4f;
+    [SerializeField] LayerMask groundMask;
+    
+    Vector3 playerVelocity;
     bool isGrounded;
+
+    const float defaultPlayerHeightforGroundCheck = -2f;
+    
+    #endregion
 
     void Awake()
     {
-        defaultSpeed = speed;
+        playerDefaultSpeed = speed;
     }
 
     void OnEnable()
@@ -30,48 +36,71 @@ public class PlayerMovement : MonoBehaviour
         SpeedCollectable.OnSpeedCollectable += UpdateSpeed;
     }
 
-    void UpdateSpeed(float Speed, float Duration)
+    void UpdateSpeed(float NewSpeed, float Duration)
     {
-        speed = Speed;
-        timeToResetSpeedToDefault = Time.time + Duration;
-        StartSpeedResetCountDown = true;
+        speed = NewSpeed;
+        timeToResetPlayerSpeedToDefault = Time.time + Duration;
+        startSpeedResetCountDown = true;
     }
 
     void Update()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        isGrounded = Physics.CheckSphere(groundCheckPosition.position, groundDistance, groundMask);
+        
+        ResetYVelocityWhenGrounded();
 
-        if(isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f;
-        }    
+        Move();
 
+        Jump();
+        
+        simulateGravity();
+
+        CheckIfSpeedBoostEffectIsOver();
+    }
+
+    void Move()
+    {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        Vector3 move = transform.right * x + transform.forward *z;
+        Vector3 movementDirection = transform.right * x + transform.forward * z;
 
-        controller.Move(move * speed * Time.deltaTime);
+        controller.Move(movementDirection * speed * Time.deltaTime);
+    }
 
-        if(Input.GetButtonDown("Jump") && isGrounded)
+    void Jump()
+    {
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            // formula for velocity needed to jump a certain height =>  v = Sqrt(Height X -2 X gravity)
+            playerVelocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
+    }
 
-        velocity.y += gravity * Time.deltaTime;
+    void simulateGravity()
+    {
+        playerVelocity.y += gravity * Time.deltaTime;
+        controller.Move(playerVelocity * Time.deltaTime);
+    }
 
-        controller.Move(velocity * Time.deltaTime);
-
-        if(StartSpeedResetCountDown && Time.time >= timeToResetSpeedToDefault)
-        {
-            speed = defaultSpeed;
-            StartSpeedResetCountDown = false;
-        }
+    void ResetYVelocityWhenGrounded()
+    {
+        if (isGrounded && playerVelocity.y < 0)
+            playerVelocity.y = defaultPlayerHeightforGroundCheck; 
     }
 
     void DisablePlayerController()
     {
         controller.enabled = false;
+    }
+
+    void CheckIfSpeedBoostEffectIsOver()
+    {
+        if (startSpeedResetCountDown && Time.time >= timeToResetPlayerSpeedToDefault)
+        {
+            speed = playerDefaultSpeed;
+            startSpeedResetCountDown = false;
+        }
     }
 
     void OnDisable()
