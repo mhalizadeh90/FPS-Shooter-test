@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3837096924461486001
+--- !u!1 &7594085428893888718
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,45 +8,59 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3837096924461486003}
-  - component: {fileID: 3837096924461486002}
+  - component: {fileID: 7594085428893888716}
+  - component: {fileID: 7594085428893888717}
+  - component: {fileID: 7594085428893888715}
   m_Layer: 0
-  m_Name: Spawn Collectibles
+  m_Name: Collectibles Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3837096924461486003
+--- !u!4 &7594085428893888716
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3837096924461486001}
+  m_GameObject: {fileID: 7594085428893888718}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -45.2, y: 93.4, z: -29.1}
+  m_LocalPosition: {x: -48.7, y: 3.9, z: -26.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3837096924461486002
+--- !u!114 &7594085428893888717
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3837096924461486001}
+  m_GameObject: {fileID: 7594085428893888718}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9dddbe79c455c6c4ab13d87a86d55dfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnAreaRadius: 45
-  SpawnMaxHeight: 40
-  Collectibles:
+  CollectablesPrefab:
   - {fileID: 913025473155414585, guid: 01b34a51047dd7d4e85dec50e0d803ec, type: 3}
   - {fileID: 913025473155414585, guid: 2312a8daaf8734a44936f3f9a7bdc938, type: 3}
-  SpawnDelayMin: 10
-  SpawnDelayMax: 15
+  SpawnDelayMin: 5
+  SpawnDelayMax: 10
+  CollectablesToSpawn: 15
+  SpawnAreaRadius: 42.5
+  SpawnMaxHeight: 40
+--- !u!114 &7594085428893888715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7594085428893888718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53cc79912dc51c1409ca4d8edda2dc26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
