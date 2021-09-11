@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
 public class HealthCollectable : MonoBehaviour,ICollectable
@@ -9,7 +7,7 @@ public class HealthCollectable : MonoBehaviour,ICollectable
     public void Use()
     {
         OnHealthCollectableUsed?.Invoke(HealthAmount);
-        //TODO: REPLACE WITH OBJECT POOL
+        //TODO: Replace with objec pool(in case of scaling up)
         Destroy(gameObject);
     }
 

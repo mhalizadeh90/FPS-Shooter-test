@@ -23,7 +23,7 @@ public class AIHealth : MonoBehaviour, IDamagable
     {
         onAIDied?.Invoke();
 
-        //TODO: USE OBJECT POOL INSTEAD OF INSTANTIATE AND DESTROY
+        //TODO: Replace with objec pool(in case of scaling up)
         Destroy(gameObject);
     }
 

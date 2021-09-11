@@ -26,7 +26,6 @@ public class PlayerHealth : MonoBehaviour, IDamagable
         currentHealth -= damageAmount;
 
         // TODO: show some particle at damage position
-
         if (currentHealth <= 0f) PlayerDied();
         else OnPlayerDamaged?.Invoke(currentHealth/MaxHealth);  // To Show Some Damage Effect
     }

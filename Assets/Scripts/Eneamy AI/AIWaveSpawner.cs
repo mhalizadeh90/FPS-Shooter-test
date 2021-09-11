@@ -55,7 +55,7 @@ public class AIWaveSpawner : MonoBehaviour
     {
         if(remainingAIsToSpawn > 0 && Time.time > nextSpawnTime)
         {
-            //TODO: Replace with Object Pool
+            //TODO: Replace with objec pool(in case of scaling up)
             EnemyAI SpawnedEnemy = Instantiate(AIPrefabs[UnityEngine.Random.Range(0, AIPrefabs.Length)], GetRandomPosition(), Quaternion.identity, transform).GetComponent<EnemyAI>();
 
             SpawnedEnemy.SetAIBrainBasedOnDificultyLevel(nextWaveNumber-1);

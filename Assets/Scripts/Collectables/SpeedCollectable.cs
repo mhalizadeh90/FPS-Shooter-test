@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
 public class SpeedCollectable : MonoBehaviour,ICollectable
@@ -10,8 +8,8 @@ public class SpeedCollectable : MonoBehaviour,ICollectable
     public void Use()
     {
         OnSpeedCollectable?.Invoke(Speed, EffectTime);
-       
-        //TODO: REPLACE WITH OBJECT POOL
+
+        //TODO: Replace with objec pool(in case of scaling up)
         Destroy(gameObject);
     }
 
