@@ -34,7 +34,7 @@ public class Knife : Weapon
 
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.blue;
+        Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(KnifeAttackPosition.position, knifeAttackRadius);
     }
 }
