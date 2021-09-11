@@ -16,7 +16,7 @@ public class SpwanCollectables : MonoBehaviour
 
     Vector3 GetRandomPositionOnMap()
     {
-        Vector3 randomDirection = Random.insideUnitCircle * SpawnAreaRadius;
+        Vector3 randomDirection = Random.insideUnitSphere * SpawnAreaRadius;
         randomDirection += transform.position;
         randomDirection.y = SpawnMaxHeight;
         return randomDirection;
@@ -34,7 +34,7 @@ public class SpwanCollectables : MonoBehaviour
             float delayTime = Random.Range(SpawnDelayMin, SpawnDelayMax);
             yield return new WaitForSeconds(delayTime);
             //TODO: Replace with Object Pool
-            Instantiate(CollectablesPrefab[Random.Range(0, CollectablesPrefab.Length)], GetRandomPositionOnMap(), Quaternion.identity);
+            Instantiate(CollectablesPrefab[Random.Range(0, CollectablesPrefab.Length)], GetRandomPositionOnMap(), Quaternion.identity, transform);
         }
     }
 

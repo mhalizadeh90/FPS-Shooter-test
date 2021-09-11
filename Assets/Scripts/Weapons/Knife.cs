@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Knife : Weapon
 {
-    public Transform KnifeAttackPosition;
     public float knifeAttackRadius = 0.5f;
     int KnifeAttackID;
 
@@ -23,7 +22,7 @@ public class Knife : Weapon
 
         weaponAnimator?.SetTrigger(KnifeAttackID);
 
-        Collider[] hits = Physics.OverlapSphere(KnifeAttackPosition.position, knifeAttackRadius, damagableLayers);
+        Collider[] hits = Physics.OverlapSphere(transform.position, knifeAttackRadius, damagableLayers);
        
         foreach (Collider hit in hits)
         {
@@ -35,6 +34,6 @@ public class Knife : Weapon
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(KnifeAttackPosition.position, knifeAttackRadius);
+        Gizmos.DrawWireSphere(transform.position, knifeAttackRadius);
     }
 }
