@@ -1,13 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.AI;
 
-public class SpwanCollectible : MonoBehaviour
+public class SpwanCollectables : MonoBehaviour
 {
-    public float SpawnAreaRadius, SpawnMaxHeight;
-    public GameObject[] Collectibles;
-    public float SpawnDelayMin, SpawnDelayMax;
+    [Header("Spawn Wave Properties")]
+    [SerializeField] GameObject[] CollectablesPrefab;
+    [SerializeField] float SpawnDelayMin;
+    [SerializeField] float SpawnDelayMax;
+    [SerializeField] int CollectablesToSpawn;
 
+
+    [Header("Spawn Position Range")]
+    [SerializeField] float SpawnAreaRadius;
+    [SerializeField] float SpawnMaxHeight;
 
     Vector3 GetRandomPositionOnMap()
     {
@@ -24,12 +29,12 @@ public class SpwanCollectible : MonoBehaviour
 
     IEnumerator SpawnCollectible()
     {
-        while (true)
+        for (int i = 0; i < CollectablesToSpawn; i++)
         {
             float delayTime = Random.Range(SpawnDelayMin, SpawnDelayMax);
             yield return new WaitForSeconds(delayTime);
-            Instantiate(Collectibles[Random.Range(0, Collectibles.Length)], GetRandomPositionOnMap(), Quaternion.identity);
-            print("A Collictable Is Spawned");
+            //TODO: Replace with Object Pool
+            Instantiate(CollectablesPrefab[Random.Range(0, CollectablesPrefab.Length)], GetRandomPositionOnMap(), Quaternion.identity);
         }
     }
 

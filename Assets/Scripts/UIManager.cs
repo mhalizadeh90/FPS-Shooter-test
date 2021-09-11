@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,11 +10,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject VictoryPanel;
     [SerializeField] GameObject GameOverPanel;
     [SerializeField] Slider HealthBarSlider;
-   
+    [SerializeField] Animator HealthEffectAnimator;
+    int TriggerDamageEffectAnimation;
+    int TriggerHealEffectAnimation;
+
     void Awake()
     {
         VictoryPanel?.SetActive(false);
         GameOverPanel?.SetActive(false);
+        TriggerDamageEffectAnimation = Animator.StringToHash("Shot");
+        TriggerHealEffectAnimation = Animator.StringToHash("Heal");
     }
 
     void OnEnable()
@@ -25,6 +29,8 @@ public class UIManager : MonoBehaviour
         PlayerHealth.OnPlayerDied += ShowGameOverPanel;
         PlayerHealth.OnPlayerDamaged += UpdateHealthBar;
         PlayerHealth.OnPlayerHealed += UpdateHealthBar;
+        PlayerHealth.OnPlayerDamaged += ShowDamageEffect;
+        PlayerHealth.OnPlayerHealed += ShowHealEffect;
     }
 
     void UpdateWaveNumber(int wave)
@@ -59,6 +65,16 @@ public class UIManager : MonoBehaviour
         HealthBarSlider.value = UpdatedHealth;
     }
 
+    void ShowDamageEffect(float damage)
+    {
+        HealthEffectAnimator?.SetTrigger(TriggerDamageEffectAnimation);
+    }
+
+    void ShowHealEffect(float damage)
+    {
+        HealthEffectAnimator?.SetTrigger(TriggerHealEffectAnimation);
+    }
+
     void OnDisable()
     {
         AIWaveSpawner.OnWaveChanged -= UpdateWaveNumber;
@@ -66,6 +82,8 @@ public class UIManager : MonoBehaviour
         PlayerHealth.OnPlayerDied -= ShowGameOverPanel;
         PlayerHealth.OnPlayerDamaged -= UpdateHealthBar;
         PlayerHealth.OnPlayerHealed -= UpdateHealthBar;
+        PlayerHealth.OnPlayerDamaged -= ShowDamageEffect;
+        PlayerHealth.OnPlayerHealed -= ShowHealEffect;
     }
 
     public static Action OnReadyToRespwn;

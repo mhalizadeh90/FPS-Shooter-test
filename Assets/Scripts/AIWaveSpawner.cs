@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AIWaveSpawner : MonoBehaviour
@@ -9,7 +7,7 @@ public class AIWaveSpawner : MonoBehaviour
 
     public EnemyWave[] aiWaves;
     [SerializeField] Transform[] spawnPortals;
-    public GameObject[] AIs;
+    public GameObject[] AIPrefabs;
 
     EnemyWave currentWave;
     int nextWaveNumber;
@@ -58,7 +56,7 @@ public class AIWaveSpawner : MonoBehaviour
         if(remainingAIsToSpawn > 0 && Time.time > nextSpawnTime)
         {
             //TODO: Replace with Object Pool
-            EnemyAI SpawnedEnemy = Instantiate(AIs[UnityEngine.Random.Range(0, AIs.Length)], GetRandomPosition(), Quaternion.identity).GetComponent<EnemyAI>();
+            EnemyAI SpawnedEnemy = Instantiate(AIPrefabs[UnityEngine.Random.Range(0, AIPrefabs.Length)], GetRandomPosition(), Quaternion.identity).GetComponent<EnemyAI>();
 
             SpawnedEnemy.SetAIBrainBasedOnDificultyLevel(nextWaveNumber-1);
 

@@ -295,7 +295,6 @@ GameObject:
   - component: {fileID: 84184418}
   - component: {fileID: 84184422}
   - component: {fileID: 84184421}
-  - component: {fileID: 84184420}
   - component: {fileID: 84184419}
   - component: {fileID: 84184423}
   m_Layer: 5
@@ -343,18 +342,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &84184420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 84184417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777cc7d6c716e744b9b73759d33243bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &84184421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7416,7 +7403,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &528101954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7429,13 +7416,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dddbe79c455c6c4ab13d87a86d55dfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnAreaRadius: 33.5
-  SpawnMaxHeight: 40
-  Collectibles:
+  CollectablesPrefab:
   - {fileID: 913025473155414585, guid: 01b34a51047dd7d4e85dec50e0d803ec, type: 3}
   - {fileID: 913025473155414585, guid: 2312a8daaf8734a44936f3f9a7bdc938, type: 3}
-  SpawnDelayMin: 20
-  SpawnDelayMax: 30
+  SpawnDelayMin: 1
+  SpawnDelayMax: 2
+  CollectablesToSpawn: 10
+  SpawnAreaRadius: 33.5
+  SpawnMaxHeight: 40
 --- !u!4 &528101955
 Transform:
   m_ObjectHideFlags: 0
@@ -7488,22 +7476,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 550208260}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17b9bde7963e6ae4b86f7f82d41d53f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ea989932c51fca48a558a2fd27ea5f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyWaves: []
+  aiWaves: []
   spawnPortals: []
-  Enemies:
-  - {fileID: 5908601346358461100, guid: 0dc7e0d299b74804cbcf6fd8c4a1081a, type: 3}
-  - {fileID: 3114128458154842768, guid: 1dd1b5539b2f5e84ea7bbf04a6c838d9, type: 3}
-  currentWave:
-    enemyCount: 0
-    timeBetweenSpawns: 0
-  nextWaveNumber: 0
-  nextSpawnTime: 0
-  remainingEnemiesToSpawn: 0
-  aliveEnemiesInThisWave: 0
-  playerPosition: {fileID: 0}
+  AIPrefabs: []
 --- !u!4 &550208262
 Transform:
   m_ObjectHideFlags: 0
@@ -90249,6 +90227,7 @@ MonoBehaviour:
   VictoryPanel: {fileID: 2077327279}
   GameOverPanel: {fileID: 526821060}
   HealthBarSlider: {fileID: 1122152274}
+  HealthEffectAnimator: {fileID: 84184419}
 --- !u!1 &6495077016928176078
 GameObject:
   m_ObjectHideFlags: 0

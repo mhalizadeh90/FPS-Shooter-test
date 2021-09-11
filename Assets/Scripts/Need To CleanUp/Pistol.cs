@@ -74,7 +74,7 @@ public class Pistol : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.green;
+        Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(KnifeSpherePoint.position, knifeSphereRadius);
     }
 
