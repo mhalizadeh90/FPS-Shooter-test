@@ -7,19 +7,9 @@ public class CheatCode : MonoBehaviour
 {
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            OnCheatCodeKill?.Invoke();
-        }
-        if(Input.GetKeyDown(KeyCode.H))
-        {
-            OnCheatCodeInfiniteHealth?.Invoke();
-        }
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            OnCheatCodeInfiniteDamage?.Invoke();
-        }
-
+        if(Input.GetKeyDown(KeyCode.K)) OnCheatCodeKill?.Invoke();
+        if (Input.GetKeyDown(KeyCode.H)) OnCheatCodeInfiniteHealth?.Invoke();
+        if (Input.GetKeyDown(KeyCode.I)) OnCheatCodeInfiniteDamage?.Invoke();
     }
 
     public static Action OnCheatCodeKill;

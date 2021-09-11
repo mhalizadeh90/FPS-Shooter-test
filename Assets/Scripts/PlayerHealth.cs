@@ -3,43 +3,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour, IDamagable
 {
     public float MaxHealth = 50f;
-    float health;
+    float currentHealth;
     bool isPlayerUndamagable = false;
+
     void Awake()
     {
-        health = MaxHealth;
+        currentHealth = MaxHealth;
     }
 
     void OnEnable()
     {
         HealthCollectable.OnHealthCollectableUsed += Heal;
         CheatCode.OnCheatCodeInfiniteHealth += SetHealthToInfinite;
-        CheatCode.OnCheatCodeKill += KillInstantly;
-
+        CheatCode.OnCheatCodeKill += PlayerDied;
     }
-    public void TakeDamage(float amount)
+    public void TakeDamage(float damageAmount, Vector3 damagePosition)
     {
         if (isPlayerUndamagable)
             return;
 
-        health -= amount;
-        
-        OnPlayerDamaged?.Invoke(health/MaxHealth);
-        
-        if (health <= 0f)
-        {
-            Die();
-        }
+        currentHealth -= damageAmount;
+
+        // TODO: show some particle at damage position
+
+        if (currentHealth <= 0f) PlayerDied();
+        else OnPlayerDamaged?.Invoke(currentHealth/MaxHealth);  // To Show Some Damage Effect
     }
 
     public void Heal(float amount)
     {
-        health += amount;
-        health = Mathf.Clamp(health, 0, MaxHealth);
-        OnPlayerHealed?.Invoke(health / MaxHealth);
+        currentHealth += amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0, MaxHealth);
+        OnPlayerHealed?.Invoke(currentHealth / MaxHealth);  // To Show Some Heal Effect
     }
 
     void SetHealthToInfinite()
@@ -48,14 +46,7 @@ public class PlayerHealth : MonoBehaviour
         isPlayerUndamagable = true;
     }
 
-    void KillInstantly()
-    {
-        isPlayerUndamagable = false;
-        TakeDamage(MaxHealth);
-    }
-
-
-    private void Die()
+    private void PlayerDied()
     {
         OnPlayerDied?.Invoke();
     }
@@ -64,7 +55,7 @@ public class PlayerHealth : MonoBehaviour
     {
         HealthCollectable.OnHealthCollectableUsed -= Heal;
         CheatCode.OnCheatCodeInfiniteHealth -= SetHealthToInfinite;
-        CheatCode.OnCheatCodeKill -= KillInstantly;
+        CheatCode.OnCheatCodeKill -= PlayerDied;
     }
 
     public static Action<float> OnPlayerDamaged;

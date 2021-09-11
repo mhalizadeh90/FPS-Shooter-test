@@ -62,7 +62,7 @@ public class Pistol : MonoBehaviour
         Collider[] hits = Physics.OverlapSphere(KnifeSpherePoint.position, knifeSphereRadius, shootableLayer);
         foreach (Collider hit in hits)
         {
-            Health target = hit.transform.GetComponent<Health>();
+            AIHealth target = hit.transform.GetComponent<AIHealth>();
             if (target != null)
             {
                 target.TakeDamage(knifeDamage, hit.transform.position);
@@ -88,12 +88,10 @@ public class Pistol : MonoBehaviour
         animator.SetTrigger("Shoot");
         if (Physics.Raycast(raycastOrigin.position, raycastOrigin.forward, out hit, range, shootableLayer) )
         {
-            
-            // Debug.Log(hit.transform.name);
-            Health target = hit.transform.GetComponent<Health>();
-            if (target != null)
+            IDamagable EnemyHealth = hit.transform.GetComponent<IDamagable>();
+            if (EnemyHealth != null)
             {
-                target.TakeDamage(damage, hit.point);
+                EnemyHealth.TakeDamage(damage, hit.point);
             }
         }
     }

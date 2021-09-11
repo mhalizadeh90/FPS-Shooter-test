@@ -34,8 +34,8 @@ public class EnemyAI : MonoBehaviour
     bool playerInSightRange, PlayerInAttackRange;
 
     Transform playerPosition;
-    protected PlayerHealth playerHealth;
-    Health EnemyHealth;
+    protected IDamagable playerHealth;
+    AIHealth EnemyHealth;
     
     [SerializeField] protected AudioSource AttackAudioPlayer;
 
@@ -44,8 +44,8 @@ public class EnemyAI : MonoBehaviour
     void Awake()
     {
         playerPosition = GameObject.FindObjectOfType<PlayerMovement>().transform;
-        playerHealth = playerPosition.GetComponent<PlayerHealth>();
-        EnemyHealth = GetComponent<Health>();
+        playerHealth = playerPosition.GetComponent<IDamagable>();
+        EnemyHealth = GetComponent<AIHealth>();
         SetAIBrainBasedOnDificultyLevel();
     }
 
@@ -139,7 +139,10 @@ public class EnemyAI : MonoBehaviour
     protected void AimAndAttack()
     {
         Vector3 aimDirection = GetAimDirection();
-        if (isAimingRaycastHittedToPlayer(aimDirection)) playerHealth?.TakeDamage(AttackDamage);
+        Vector3 hitPoint;
+
+        if (isAimingRaycastHittedToPlayer(aimDirection,out hitPoint)) 
+            playerHealth?.TakeDamage(AttackDamage, hitPoint);
     }
 
     protected void UpdateNextAttackTimeBasedOnFireRate()
@@ -159,10 +162,12 @@ public class EnemyAI : MonoBehaviour
         return aimDirection;
     }
 
-    bool isAimingRaycastHittedToPlayer(Vector3 ShootDirection)
+    bool isAimingRaycastHittedToPlayer(Vector3 ShootDirection, out Vector3 hitPoint)
     {
         RaycastHit hit;
-        return(Physics.Raycast(transform.position, ShootDirection, out hit, attackRange + attackRangeOffset, WhatIsPlayer));
+        bool isRaycastHit = Physics.Raycast(transform.position, ShootDirection, out hit, attackRange + attackRangeOffset, WhatIsPlayer);
+        hitPoint = hit.point;
+        return isRaycastHit;
     }
 
     void ResetAttack()
