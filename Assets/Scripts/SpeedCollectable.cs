@@ -10,11 +10,11 @@ public class SpeedCollectable : MonoBehaviour,ICollectable
     public void Use()
     {
         OnSpeedCollectable?.Invoke(Speed, EffectTime);
+       
+        //TODO: REPLACE WITH OBJECT POOL
         Destroy(gameObject);
     }
 
-    /// <summary>
-    /// Arguments: Speed,EffectTime
-    /// </summary>
+    /// <summary>  Arguments: (Speed,EffectTime)  </summary>
     public static Action<float, float> OnSpeedCollectable;
 }

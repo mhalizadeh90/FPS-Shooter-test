@@ -1,8 +1,8 @@
-﻿
-using System;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Pistol : MonoBehaviour
+public class Knife : Weapon
 {
     public float damage = 10f;
     public float range = 100f;
@@ -12,7 +12,7 @@ public class Pistol : MonoBehaviour
     AudioSource audio;
     public ParticleSystem shootParticle;
     public Animator animator;
-    
+
     public float fireRate = 0.15f;
     float nextTimeToFire = 0;
 
@@ -41,7 +41,7 @@ public class Pistol : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire)
+        if (Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire)
         {
             Shoot();
             nextTimeToFire = Time.time + fireRate;
@@ -79,7 +79,7 @@ public class Pistol : MonoBehaviour
         audio.Play();
         shootParticle.Play();
         animator.SetTrigger("Shoot");
-        if (Physics.Raycast(raycastOrigin.position, raycastOrigin.forward, out hit, range, shootableLayer) )
+        if (Physics.Raycast(raycastOrigin.position, raycastOrigin.forward, out hit, range, shootableLayer))
         {
             IDamagable EnemyHealth = hit.transform.GetComponent<IDamagable>();
             if (EnemyHealth != null)

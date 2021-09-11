@@ -13,5 +13,6 @@ public class HealthCollectable : MonoBehaviour,ICollectable
         Destroy(gameObject);
     }
 
+    /// <summary>  Arguments: (HealthAmount)  </summary>
     public static Action<float> OnHealthCollectableUsed;
 }
