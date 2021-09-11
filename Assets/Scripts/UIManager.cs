@@ -6,11 +6,12 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public Text waveNumber;
-    public Text RespawnNumber;
-    public GameObject VictoryPanel;
-    public GameObject GameOverPanel;
-
+    [SerializeField] Text waveNumber;
+    [SerializeField] Text RespawnNumber;
+    [SerializeField] GameObject VictoryPanel;
+    [SerializeField] GameObject GameOverPanel;
+    [SerializeField] Slider HealthBarSlider;
+   
     void Awake()
     {
         VictoryPanel?.SetActive(false);
@@ -19,9 +20,11 @@ public class UIManager : MonoBehaviour
 
     void OnEnable()
     {
-        Spawner.OnWaveChanged += UpdateWaveNumber;
-        Spawner.OnAllEnemiesKilled += ShowVictoryPanel;
+        AIWaveSpawner.OnWaveChanged += UpdateWaveNumber;
+        AIWaveSpawner.OnAllAIsDied += ShowVictoryPanel;
         PlayerHealth.OnPlayerDied += ShowGameOverPanel;
+        PlayerHealth.OnPlayerDamaged += UpdateHealthBar;
+        PlayerHealth.OnPlayerHealed += UpdateHealthBar;
     }
 
     void UpdateWaveNumber(int wave)
@@ -51,11 +54,18 @@ public class UIManager : MonoBehaviour
         OnReadyToRespwn?.Invoke();
     }
 
+    void UpdateHealthBar(float UpdatedHealth)
+    {
+        HealthBarSlider.value = UpdatedHealth;
+    }
+
     void OnDisable()
     {
-        Spawner.OnWaveChanged -= UpdateWaveNumber;
-        Spawner.OnAllEnemiesKilled -= ShowVictoryPanel;
+        AIWaveSpawner.OnWaveChanged -= UpdateWaveNumber;
+        AIWaveSpawner.OnAllAIsDied -= ShowVictoryPanel;
         PlayerHealth.OnPlayerDied -= ShowGameOverPanel;
+        PlayerHealth.OnPlayerDamaged -= UpdateHealthBar;
+        PlayerHealth.OnPlayerHealed -= UpdateHealthBar;
     }
 
     public static Action OnReadyToRespwn;

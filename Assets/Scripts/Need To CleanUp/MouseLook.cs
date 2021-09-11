@@ -11,7 +11,7 @@ public class MouseLook : MonoBehaviour
 
     void OnEnable()
     {
-        Spawner.OnAllEnemiesKilled += EnableMouseCursor;
+        AIWaveSpawner.OnAllAIsDied += EnableMouseCursor;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -37,6 +37,6 @@ public class MouseLook : MonoBehaviour
 
     void OnDisable()
     {
-        Spawner.OnAllEnemiesKilled -= EnableMouseCursor;
+        AIWaveSpawner.OnAllAIsDied -= EnableMouseCursor;
     }
 }

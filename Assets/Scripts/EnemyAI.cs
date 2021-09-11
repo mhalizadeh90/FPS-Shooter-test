@@ -7,8 +7,8 @@ public class EnemyAI : MonoBehaviour
     #region Fields
 
     [SerializeField] AIBrain aiBrain;
-    public NavMeshAgent agent;
-
+    [SerializeField] NavMeshAgent agent;
+    [SerializeField] int DefaultAIBrainLevel;
 
     [SerializeField] LayerMask WhatisGround, WhatIsPlayer, obstacle;
     [SerializeField] float GroundRaycastDistance = 0.1f;
@@ -19,11 +19,11 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] float patrolingDistanceRange;
     [SerializeField] float MaxDurationOfEachPatrolingCycle = 5;
     float nextTimeForChangingWalkPoint = 0;
-    private const float minimumDistanceToWalkPoint = 5;
+    const float minimumDistanceToWalkPoint = 5;
 
 
     // attacking
-    public float timeBetweenAttacks;
+    [SerializeField] float timeBetweenAttacks;
     protected bool isAlreadyInAttackedState;
     float AttackDamage;
     float missShotPercentage;
@@ -46,7 +46,7 @@ public class EnemyAI : MonoBehaviour
         playerPosition = GameObject.FindObjectOfType<PlayerMovement>().transform;
         playerHealth = playerPosition.GetComponent<IDamagable>();
         EnemyHealth = GetComponent<AIHealth>();
-        SetAIBrainBasedOnDificultyLevel();
+        SetAIBrainBasedOnDificultyLevel(DefaultAIBrainLevel);
     }
 
     void Update()
@@ -175,7 +175,7 @@ public class EnemyAI : MonoBehaviour
         isAlreadyInAttackedState = false;
     }
 
-    public void SetAIBrainBasedOnDificultyLevel(int DifficulityLevel = 0)
+    public void SetAIBrainBasedOnDificultyLevel(int DifficulityLevel)
     {
         sightRange = aiBrain.SightRange + (aiBrain.SightRange * aiBrain.SightRangeUpdateStep * DifficulityLevel);
         attackRange = aiBrain.AttackRange + (aiBrain.AttackRange * aiBrain.AttackRangeUpdateStep * DifficulityLevel);

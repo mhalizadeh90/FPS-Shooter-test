@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DisableOnGameOver : MonoBehaviour
+public class DisableThisObjectOnGameOver : MonoBehaviour
 {
     void OnEnable()
     {
-        PlayerHealth.OnPlayerDied += DisableObject;
+        PlayerHealth.OnPlayerDied += DisableGameObject;
     }
 
-    void DisableObject()
+    void DisableGameObject()
     {
         gameObject.SetActive(false);
     }
+
+
     void OnDisable()
     {
-        PlayerHealth.OnPlayerDied -= DisableObject;
+        PlayerHealth.OnPlayerDied -= DisableGameObject;
     }
 }
